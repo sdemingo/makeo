@@ -167,9 +167,9 @@ int initparser(char *file,tab *t)
   
   s=getsim(t,"main");
   if (s==NULL)
-    error("Function main not defined\n");
+    panic(NULL,"Function main not defined\n");
   if (isnull(s->val))
-    error("Function main not defined\n");
+    panic(NULL,"Function main not defined\n");
 
   pcounter=s->val.data.ival;
   
