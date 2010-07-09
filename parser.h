@@ -19,6 +19,7 @@ enum Type{C_ATH = 1,
 	  C_FUNCTION,
 	  C_RETURN,
 	  C_CALL,
+	  C_IO,
 	  NULLTYPE
 };
 typedef enum Type Type;

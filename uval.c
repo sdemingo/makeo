@@ -10,17 +10,18 @@ u_val get_u_val(char *arg){
   if (arg==NULL)  
     return null_u_val();
   
-  
   if ((arg[0]=='"') && (arg[strlen(arg)-1]=='"')){
     u.type=STRING;
+    u.data.sval=(char*)malloc(sizeof(char)*strlen(arg));
+    arg++;
     strcpy(u.data.sval,arg);
+    u.data.sval[strlen(u.data.sval)-1]='\0';
   }else{
     u.type=INT;
     u.data.ival=atoi(arg);
   }
 
   return u;
-
 }
 
 

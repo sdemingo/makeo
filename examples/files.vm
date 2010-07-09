@@ -7,6 +7,10 @@
 # a=1
 # b=3
 # res=sum(a,b)
+# f=open('/tmp/prueba.txt')
+# write(f,res);
+# close(f);
+
 
 
 # subrutine 1
@@ -26,8 +30,10 @@ push const 11
 call sum  
 pop res
 
-
-
-
-
+#abro y escribo el fichero
+push const "./tmp/prueba.txt"
+pop file
+open file
+pop fd
+close fd
 

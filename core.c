@@ -9,9 +9,7 @@
 
 extern int pcounter;
 
-/*
-  Evaluation expresion
- */
+
 
 void op_add(com *c){
   u_val u1,u2,ures;
@@ -59,6 +57,41 @@ void op_sub(com *c){
 
 
 
+void io_op(com *c,tab *t){
+  int index;
+  u_val u;
+  sim *s;
+  
+  if (!strcmp(c->cmd,"open")){
+    if (!isvalidcom(c,1))
+      panic(c,"bad command");
+    
+    s=getsim(t,c->arg1);
+    if (s==NULL)
+      panic(c,"simbol not found");
+
+    if ((index=io_open(s->val.data.sval))<0)
+      error ("file %s can be opened\n",s->val.data.sval);
+ 
+    u.type=INT;
+    u.data.ival=index;
+    push(u);
+    
+  }else if(!strcmp(c->cmd,"close")){
+    if (!isvalidcom(c,1))
+      panic(c,"bad command");
+    s=getsim(t,c->arg1);
+    if (s==NULL)
+      panic(c,"simbol not found");
+    if ((index=io_close(s->val.data.ival))<0)
+      error ("file %s can be closed\n",s->val.data.ival);
+    
+  }else
+    error ("operation %s unknow\n",c->cmd);
+}
+
+
+
 void eval_op(com *c){
   
   
@@ -69,6 +102,8 @@ void eval_op(com *c){
   }else
     error ("operation %s unknow\n",c->cmd);
 }
+
+
 
 
 void push_op(com *c,tab *t){
@@ -263,6 +298,9 @@ void proccom(com *c,tab **t){
     // Borrar el contexto de la funcion y volver al padre
     delcontext(t);
     break;
+
+  case C_IO:
+    io_op(c,*t);
 
   default:
     break;

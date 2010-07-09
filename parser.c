@@ -201,6 +201,10 @@ int gettype(char *cs){
     return C_CALL;
   else if ((!strcmp(cs,"add")) || (!strcmp(cs,"sub"))) 
     return C_ATH;
+  else if ((!strcmp(cs,"open")) || (!strcmp(cs,"close"))
+	   || (!strcmp(cs,"read")) || (!strcmp(cs,"write"))
+	   || (!strcmp(cs,"seek")))
+    return C_IO;
   else
     return NULLTYPE;
 }
