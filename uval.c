@@ -16,6 +16,7 @@ u_val get_u_val(char *arg){
     arg++;
     strcpy(u.data.sval,arg);
     u.data.sval[strlen(u.data.sval)-1]='\0';
+
   }else{
     u.type=INT;
     u.data.ival=atoi(arg);
@@ -38,7 +39,6 @@ u_val null_u_val(){
 char* u_val2text(u_val u){
 
   char *str;
-
  
   str=(char*)malloc(50);
 
@@ -52,6 +52,38 @@ char* u_val2text(u_val u){
   
   return str;
 }
+
+
+int u_valtype(char *str){
+
+  if (!strcmp(str,"int"))
+    return INT;
+  else if (!strcmp(str,"string"))
+    return STRING;
+  else if (!strcmp(str,"float"))
+    return FLOAT;
+  else
+    return NULLVAL;
+}
+
+
+int u_val2bytes(u_val u,char **buf){
+
+  if ( (isnull(u)) || (*buf==NULL))
+    return -1;
+
+  if (u.type==STRING){
+    strcpy(*buf,u.data.sval);
+    return sizeof(u.data.sval);
+  }
+  else if (u.type==INT){
+    sprintf (*buf,"%d",u.data.ival);
+    return sizeof(u.data.ival);
+  }
+
+  return 0;
+}
+
 
 
 

@@ -35,5 +35,5 @@ push const "./tmp/prueba.txt"
 pop file
 open file
 pop fd
+write fd res
 close fd
-

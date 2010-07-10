@@ -24,6 +24,8 @@ typedef struct u_val u_val;
 u_val get_u_val(char *arg);
 u_val null_u_val();
 char* u_val2text(u_val u);
+int u_val2bytes(u_val u,char **buf);
+int u_valtype(char *str);
 int isnull(u_val u);
 
 #endif

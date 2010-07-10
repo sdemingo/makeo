@@ -58,10 +58,12 @@ void op_sub(com *c){
 
 
 void io_op(com *c,tab *t){
-  int index;
-  u_val u;
+  int index,fd;
+  u_val u,*pu;
   sim *s;
+
   
+  /* Open file */
   if (!strcmp(c->cmd,"open")){
     if (!isvalidcom(c,1))
       panic(c,"bad command");
@@ -69,22 +71,68 @@ void io_op(com *c,tab *t){
     s=getsim(t,c->arg1);
     if (s==NULL)
       panic(c,"simbol not found");
-
+    
     if ((index=io_open(s->val.data.sval))<0)
       error ("file %s can be opened\n",s->val.data.sval);
  
     u.type=INT;
     u.data.ival=index;
     push(u);
-    
+
+
+    /* Close file */
   }else if(!strcmp(c->cmd,"close")){
     if (!isvalidcom(c,1))
       panic(c,"bad command");
     s=getsim(t,c->arg1);
     if (s==NULL)
       panic(c,"simbol not found");
-    if ((index=io_close(s->val.data.ival))<0)
+    fd=s->val.data.ival;
+    
+    if ((index=io_close(fd))<0)
       error ("file %s can be closed\n",s->val.data.ival);
+
+
+
+    /* Write file */
+  }else if(!strcmp(c->cmd,"write")){
+    if (!isvalidcom(c,2))
+      panic(c,"bad command");
+
+    s=getsim(t,c->arg1);
+    if (s==NULL)
+      panic(c,"simbol not found");
+    fd=s->val.data.ival;
+    s=getsim(t,c->arg2);
+    if (s==NULL)
+      panic(c,"simbol not found");
+    
+    if ((index=io_write(fd,s->val))<0)
+      error ("error at write\n");
+
+
+
+    /* Read file */
+  }else if(!strcmp(c->cmd,"read")){
+    if (!isvalidcom(c,2))
+      panic(c,"bad command");
+
+    s=getsim(t,c->arg1);
+    if (s==NULL)
+      panic(c,"simbol not found");
+    fd=s->val.data.ival;
+   
+    u.type=u_valtype(c->arg2);
+    if (isnull(u))
+      panic(c,"bad command");
+
+    //pu=&u;
+    
+    if ((index=io_read(fd,&u))<0)
+      error ("error at read\n");
+    
+    push(u);
+    
     
   }else
     error ("operation %s unknow\n",c->cmd);

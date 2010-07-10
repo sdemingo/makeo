@@ -21,16 +21,19 @@ int io_open(char* file){
   int i;
   int fd;
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-  int flags=O_WRONLY | O_CREAT | O_TRUNC;
+  int flags=O_RDWR;
+  struct stat st;
   
   for (i=0;i<FTAB_SIZE;i++)
     if (ftab[i]==NULL){
 
-      fd=open(file,flags, mode);
-      if (fd<0){
-	perror("error");
-	return -2;
-      }
+      if (stat(file,&st)<0)
+	fd=creat(file,mode);
+      else
+	fd=open(file,flags, mode);
+
+      if (fd<0)
+	return -1;
       
       ftab[i]=(fnode*)malloc(sizeof(fnode));
       ftab[i]->path=file;
@@ -43,11 +46,12 @@ int io_open(char* file){
 
 
 
-int io_close(int index){
+int io_close(int i){
 
-  if (index<FTAB_SIZE){
-    free(ftab[index]);
-    ftab[index]=NULL;
+  if (i<FTAB_SIZE){
+    close(ftab[i]->fd);
+    free(ftab[i]);
+    ftab[i]=NULL;
     return 0;
   }else
     return -1;
@@ -56,17 +60,46 @@ int io_close(int index){
 
 
 
-int io_read(int index,sim **buf){
+int io_read(int i,u_val *u){
 
-  return 0;
+  int sz,n;
+  char *buf;
+
+  sz=sizeof(int);
+
+  if (isnull(*u))
+    return -1;
+
+  if (ftab[i]==NULL)
+    return -1;
+
+  if (u->type==INT){
+    buf=(char*)malloc(sizeof(sz));
+    n=read(ftab[i]->fd,buf,sz);
+    u->data.ival=atoi(buf);
+
+  }else if (u->type==STRING)
+    return -1;
+
+  else if (u->type==NULLVAL)
+    return -1;
+    
+  return n;
 }
 
 
 
 
-int io_write(int index,sim **buf){
+int io_write(int i,u_val u){
+  int n;
+  char *buf;
 
-  return 0;
+  buf=(char*)malloc(sizeof(char)*512);
+  n=u_val2bytes(u,&buf);
+  if (n<0)
+    return n;
+  
+  return write(ftab[i]->fd,buf,n);
 }
 
 

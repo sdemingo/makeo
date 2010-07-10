@@ -1,0 +1,16 @@
+
+# f=open('/tmp/prueba.txt')
+# nuevo=read(f,INT);
+# close(f);
+
+
+
+function main
+#abro y leo el fichero
+push const "./tmp/prueba.txt"
+pop file
+open file
+pop fd
+read fd int
+close fd
+pop nuevo
