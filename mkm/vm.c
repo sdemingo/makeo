@@ -23,13 +23,9 @@ int main (int argc, char **argv){
   mtab=NULL;
 
   newcontext(&mtab,"global");
-  n=initparser(argv[1],mtab);
-  printf ("leidas %d lineas\n",n);
+  initparser(argv[1],mtab);
   initstack();
 
-  //ptab(*mtab);
-
-  
   do{
     c=nextcom();
     if (c==NULL)

@@ -16,61 +16,6 @@ int pcounter;
 
 
 
-char *trim(char **line){
-  char *s;
-  char *start,*end;
-  
-  s=(char*)malloc(strlen(*line));
-  start=*line;
-  while ((*start==' ') || (*start=='\t'))
-    start++;
-  
-  end=*line+strlen(*line)-1;
-  while ((*end==' ') || (*end=='\t'))
-    end--;
-  
-  strncpy(s,start,(end-start)+1);
-  *line=s;   
-}
-
-
-
-
-char *readtxt (char *file)
-{
-  int fd;
-  long n;
-  char *buf;
-  char *txt=NULL,*aux=NULL;
-  int c=0,off=0;
-  
-  if ((fd=open(file, O_RDONLY)) <0){
-    perror("open error");
-    return NULL;
-  }
-  
-  buf=(char*)malloc(BUFSIZE*sizeof(char));
-  if (buf==NULL){
-    perror("no memory to buffer");
-    return NULL;
-  }
-  
-  while ((n=read(fd, buf,BUFSIZE))>0){
-      c+=n;
-      txt=(char*)realloc(txt,c*sizeof(char));
-      aux=txt+off;
-      aux=memcpy(aux,buf,n);
-      off+=n;
-  }
-  txt[c]='\0';
-  free(buf);
-  close(fd);
-  
-  return txt;	
-}
-
-
-
 com *getcom(char *tok)
 {
   com *c;
@@ -151,39 +96,47 @@ void loadlabels(int nlines,tab *t){
 
 int initparser(char *file,tab *t)
 {
+
+  FILE * fp;
+  char * line = NULL;
+  size_t len = 0;
+  ssize_t read;
   int i=0;
-  char *pbuf,*line;
   com* c;
-  u_val u;
   sim *s;
-
-  pcounter=0;
-
-  pbuf=readtxt(file);
-
-  for (line=pbuf;line!=NULL;pbuf=NULL){
-    line=strtok(pbuf,BRKLINE);
-    //trim(&line);
-    c=getcom(line);
-    if ((c!=NULL) && (c->type!=NULLTYPE)){
-      c->nline=i;
-      commands[i++]=c;
+  
+  fp = fopen(file, "r");
+  if (fp == NULL)
+    return i;
+  
+  while ((read = getline(&line, &len, fp)) != -1) {
+    if (line!=NULL){
+      line[strlen(line)-1]='\0';
+      c=getcom(line);
+      if ((c!=NULL) && (c->type!=NULLTYPE)){
+	c->nline=i;
+	commands[i++]=c;
+      }
+    //printf("%s", line);
     }
   }
+  if (line)
+    free(line);  
+
 
   loadlabels(i,t);
-  
+
   s=getsim(t,"main");
   if (s==NULL)
     panic(NULL,"Function main not defined\n");
   if (isnull(s->val))
     panic(NULL,"Function main not defined\n");
-
+  
   pcounter=s->val.data.ival;
   
-
   return i;
 }
+
 
 
 int gettype(char *cs){

@@ -16,8 +16,8 @@ void escapes(char **str){
       p++;
       if (*p=='n')
 	*res=0x0A;
-      //if (*p=='t')
-      //*res=0x09;
+      if (*p=='t')
+	*res=0x09;
     }else{
       *res=*p;
     }
@@ -42,7 +42,6 @@ u_val get_u_val(char *arg){
     escapes(&u.data.sval);
    
     u.data.sval[strlen(u.data.sval)-1]='\0';
-    printf ("[%s]\n",u.data.sval);
   }else{
     u.type=INT;
     u.data.ival=atoi(arg);
@@ -109,8 +108,6 @@ int u_val2bytes(u_val u,char **buf){
 
   return 0;
 }
-
-
 
 
 int isnull(u_val u){

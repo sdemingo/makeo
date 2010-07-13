@@ -22,7 +22,7 @@ int io_open(char* file){
   int i;
   int fd;
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-  int flags=O_RDWR;
+  int flags=O_RDWR | O_TRUNC;
   struct stat st;
   
   for (i=0;i<FTAB_SIZE;i++)

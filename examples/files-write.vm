@@ -30,7 +30,7 @@ push const 11
 call sum  
 pop res
 
-push const "hola que tal"
+push const "hola que tal\nYo\tmuy bien\n"
 pop cad
 
 #abro y escribo el fichero
@@ -38,6 +38,6 @@ push const "./tmp/prueba.txt"
 pop file
 open file
 pop fd
-push const "Escribo una fase como string"
+push sim cad
 write fd
 close fd
