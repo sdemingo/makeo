@@ -117,7 +117,6 @@ int initparser(char *file,tab *t)
 	c->nline=i;
 	commands[i++]=c;
       }
-    //printf("%s", line);
     }
   }
   if (line)
@@ -128,9 +127,9 @@ int initparser(char *file,tab *t)
 
   s=getsim(t,"main");
   if (s==NULL)
-    panic(NULL,"Function main not defined\n");
+    error(NULL,"Function main not defined\n");
   if (isnull(s->val))
-    panic(NULL,"Function main not defined\n");
+    error(NULL,"Function main not defined\n");
   
   pcounter=s->val.data.ival;
   

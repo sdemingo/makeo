@@ -25,13 +25,17 @@ int io_open(char* file){
   int flags=O_RDWR | O_TRUNC;
   struct stat st;
   
-  for (i=0;i<FTAB_SIZE;i++)
+  for (i=0;i<FTAB_SIZE;i++){
     if (ftab[i]==NULL){
-
-      if (stat(file,&st)<0)
-	fd=creat(file,mode);
-      else
-	fd=open(file,flags, mode);
+      if (!strcmp(file,"in"))
+	fd=0;
+      else if (!strcmp(file,"out"))
+	fd=1;
+      else 
+	if (stat(file,&st)<0)
+	  fd=creat(file,mode);
+	else
+	  fd=open(file,flags, mode);
 
       if (fd<0)
 	return -1;
@@ -41,6 +45,7 @@ int io_open(char* file){
       ftab[i]->fd=fd;
       return i;
     }
+  }
   
   return -1;
 }
@@ -50,7 +55,9 @@ int io_open(char* file){
 int io_close(int i){
 
   if (i<FTAB_SIZE){
-    close(ftab[i]->fd);
+    if ((strcmp(ftab[i]->path,"out")) &&
+	(strcmp(ftab[i]->path,"in")))
+      close(ftab[i]->fd);
     free(ftab[i]);
     ftab[i]=NULL;
     return 0;
@@ -107,7 +114,7 @@ int io_write(int i,u_val u){
   n=u_val2bytes(u,&buf);
   if (n<0)
     return n;
-  
+
   return write(ftab[i]->fd,buf,n);
 }
 

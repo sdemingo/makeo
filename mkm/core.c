@@ -10,17 +10,16 @@
 extern int pcounter;
 
 
-
 void op_add(com *c){
   u_val u1,u2,ures;
   
   u1=pop();
   u2=pop();
   if ((isnull(u1)) || (isnull(u2)))
-    error("no enough operators in stack to add\n");
+    error(c,"no enough operators in stack to add\n");
   
   if (u1.type!=u2.type)
-    error("operators type are diferents\n");
+    error(c,"operators type are diferents\n");
   
   ures.type=u1.type;
   if (ures.type==INT)
@@ -28,7 +27,7 @@ void op_add(com *c){
   if (ures.type==FLOAT)
     ures.data.fval=u1.data.fval+u2.data.fval;
   /*
-    ¿Permitir suma de caracteres y de string?
+    Should I allow to add string types?
   */
   push(ures);
 }
@@ -41,10 +40,10 @@ void op_sub(com *c){
   u1=pop();
   u2=pop();
   if ((isnull(u1)) || (isnull(u2)))
-    error("no enough operators in stack to add\n");
+    error(c,"no enough operators in stack to sub\n");
   
   if (u1.type!=u2.type)
-    error("operators type are diferents\n");
+    error(c,"operators type are diferents\n");
   
   ures.type=u1.type;
   if (ures.type==INT)
@@ -53,6 +52,28 @@ void op_sub(com *c){
     ures.data.fval=u1.data.fval-u2.data.fval;
   push(ures);
 }
+
+
+
+void op_mul(com *c){
+  u_val u1,u2,ures;
+  
+  u1=pop();
+  u2=pop();
+  if ((isnull(u1)) || (isnull(u2)))
+    error(c,"no enough operators in stack to mul\n");
+  
+  if (u1.type!=u2.type)
+    error(c,"operators type are diferents\n");
+  
+  ures.type=u1.type;
+  if (ures.type==INT)
+    ures.data.ival=u1.data.ival*u2.data.ival;
+  if (ures.type==FLOAT)
+    ures.data.fval=u1.data.fval*u2.data.fval;
+  push(ures);
+}
+
 
 
 
@@ -66,14 +87,14 @@ void io_op(com *c,tab *t){
   /* Open file */
   if (!strcmp(c->cmd,"open")){
     if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
     
     s=getsim(t,c->arg1);
     if (s==NULL)
-      panic(c,"simbol not found");
+      error(c,"simbol not found");
     
     if ((index=io_open(s->val.data.sval))<0)
-      error ("file %s can be opened\n",s->val.data.sval);
+      error (c,"file %s can be opened\n",s->val.data.sval);
  
     u.type=INT;
     u.data.ival=index;
@@ -83,52 +104,52 @@ void io_op(com *c,tab *t){
     /* Close file */
   }else if(!strcmp(c->cmd,"close")){
     if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
     s=getsim(t,c->arg1);
     if (s==NULL)
-      panic(c,"simbol not found");
+      error(c,"simbol not found");
     fd=s->val.data.ival;
     
     if ((index=io_close(fd))<0)
-      error ("file %s can be closed\n",s->val.data.ival);
+      error (c,"file %s can be closed\n",s->val.data.ival);
 
 
 
     /* Write file */
   }else if(!strcmp(c->cmd,"write")){
     if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
     s=getsim(t,c->arg1);
     if (s==NULL)
-      panic(c,"simbol not found");
+      error(c,"simbol not found");
     fd=s->val.data.ival;
     u=pop();
     if ((index=io_write(fd,u))<0)
-      error ("error at write\n");
+      error (c,"error at write\n");
 
 
 
     /* Read file */
   }else if(!strcmp(c->cmd,"read")){
     if (!isvalidcom(c,2))
-      panic(c,"bad command");
+      error(c,"bad command");
 
     s=getsim(t,c->arg1);
     if (s==NULL)
-      panic(c,"simbol not found");
+      error(c,"simbol not found");
     fd=s->val.data.ival;
     u.type=u_valtype(c->arg2);
     if (isnull(u))
-      panic(c,"bad command");
+      error(c,"bad command");
     
     if ((index=io_read(fd,&u))<0)
-      error ("error at read\n");
+      error(c,"error at read\n");
     
     push(u);
     
     
   }else
-    error ("operation %s unknow\n",c->cmd);
+    error (c,"operation %s unknow\n",c->cmd);
 }
 
 
@@ -140,8 +161,10 @@ void eval_op(com *c){
     op_add(c);
   }else if(!strcmp(c->cmd,"sub")){
     op_sub(c);
+  }else if(!strcmp(c->cmd,"mul")){
+    op_mul(c);
   }else
-    error ("operation %s unknow\n",c->cmd);
+    error (c,"operation %s unknow\n",c->cmd);
 }
 
 
@@ -157,10 +180,10 @@ void push_op(com *c,tab *t){
   }else if (!strcmp(c->arg1,"sim")){
     s=getsim(t,c->arg2);
     if (s==NULL)
-      error("simbol unknow\n");
+      error(c,"simbol unknow\n");
     u=s->val;
     if (isnull(u))
-      error("simbol unknow\n");
+      error(c,"simbol unknow\n");
     push(u);
   }
 }
@@ -169,13 +192,18 @@ void push_op(com *c,tab *t){
 
 
 
-void error(char *fmt,...){
+void error(com* c,char *fmt,...){
   
   va_list ap;
   char *p,*sval;
   int ival;
 
-  printf ("error:");
+  if (c!=NULL){
+    printf ("Error on command at line %d\n\t",c->nline);
+    printcom(c);
+  }else{
+    printf ("Error on command at unknow line\n");
+  }
 
   va_start(ap,fmt);
   for (p=fmt; *p;  p++){
@@ -202,19 +230,8 @@ void error(char *fmt,...){
     
   }
   va_end(ap);
+  exit(-1);
 }
-
-
-
-void panic(com *c,char *fmt,...){
-  if (c==NULL)
-    printf ("Panic at unknow line:");
-  else
-    printf ("Panic at line %d:",c->nline);
-  error(fmt);
-  exit(0);
-}
-
 
 
 void proccom(com *c,tab **t){
@@ -228,30 +245,30 @@ void proccom(com *c,tab **t){
     
   case C_PUSH:
     if (!isvalidcom(c,2))
-      panic(c,"bad command");
+      error(c,"bad command");
     push_op(c,*t);
     break;
     
   case C_POP:
     if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
     u=pop();
     if (isnull(u))
-      panic(c,"empty stack\n");
+      error(c,"empty stack\n");
     addsim(*t,c->arg1,u);
     break;
 
 
   case C_ATH:
    if (!isvalidcom(c,0))
-      panic(c,"bad command");
+      error(c,"bad command");
     eval_op(c);
     break;
 
 
   case C_LABEL:
    if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
     sprintf(istr,"%d",c->nline);
     u=get_u_val(istr);
     addsim(*t,c->arg1,u);
@@ -260,7 +277,7 @@ void proccom(com *c,tab **t){
 
   case C_GOTO:
    if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
     s=getsim(*t,c->arg1);
     pcounter=s->val.data.ival;
     break;
@@ -269,15 +286,11 @@ void proccom(com *c,tab **t){
 
   case C_GOTO_IFNZ:
    if (!isvalidcom(c,1))
-      panic(c,"bad command");
-    /*
-      Si la cima de la pila no es cero salta
-      a la etiqueta.
-      Si el valor es igual cero continua
-     */
+      error(c,"bad command");
+
     u=pop();
     if (isnull(u))
-      panic(c,"empty stack\n");
+      error(c,"empty stack\n");
 
     if ((u.type==INT) && (u.data.ival!=0)){
       s=getsim(*t,c->arg1);
@@ -288,55 +301,44 @@ void proccom(com *c,tab **t){
 
   case C_FUNCTION:
    if (!isvalidcom(c,1))
-      panic(c,"bad command");
-    u=pop();  // Guardo la direccion de retorno para volver al llamante
+      error(c,"bad command");
+    u=pop();                     //Save the return address to can back
     if (isnull(u))
-      panic(c,"empty stack");
-    /*
-      Aqui hemos de crear un nuevo entorno en la tabla
-      de simbolos antes de incluir ret, en la nueva tabla.
-      Debemos pasar un doble puntero de tab a proctoken
-      porque en su interior esta tabla puede actualizarse.
-    */
+      error(c,"empty stack");
+
     newcontext(t,c->arg1);
     addsim(*t,"ret",u);
-    printf ("Creo la tabla de simbolos %s\n",c->arg1);
     break;
 
     
   case C_CALL:
    if (!isvalidcom(c,1))
-      panic(c,"bad command");
-    //Meto en la pila la dir de retorno
+      error(c,"bad command");
     sprintf(istr,"%d",pcounter);
     u=get_u_val(istr);
-    push(u);
+    push(u);                     //push in the stack the return address
 
-    //Salto a la funcion
     s=getsim(*t,c->arg1);
     if (s==NULL){
-      error("Not function %s defined\n",c->arg1);
+      error(c,"Not function %s defined\n",c->arg1);
       break;
     }
     if (isnull(u))
-      panic(c,"bad function call");
-    pcounter=s->val.data.ival;
+      error(c,"bad function call");
+    pcounter=s->val.data.ival;    //jump to the function address
     break;
 
 
   case C_RETURN:
     if (!isvalidcom(c,1))
-      panic(c,"bad command");
+      error(c,"bad command");
 
-    //Meter en la cima de la pila el simbolo que le precede a return
-    push_op(c,*t);
+    push_op(c,*t);                //Push to stack the return value of the function
 
-    //Saltar a la direccion apuntada por el simbolo 'ret'
     s=getsim(*t,"ret");
     if (isnull(u))
-      panic(c,"Return address not defined\n");
-    pcounter=s->val.data.ival;
-    // Borrar el contexto de la funcion y volver al padre
+      error(c,"Return address not defined\n");
+    pcounter=s->val.data.ival;   //return to the caller
     delcontext(t);
     break;
 

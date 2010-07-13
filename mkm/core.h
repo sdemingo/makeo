@@ -3,8 +3,7 @@
 
 #include "parser.h"
 
-void error(char *fmt,...);
-void panic(com *c,char *fmt,...);
+void error(com *c,char *fmt,...);
 void proccom(com* token,tab **simtab);
 
 #endif

@@ -23,7 +23,7 @@ void push(u_val a){
   if (sp<MAX_SIZE)
     stack[sp++]=a;
   else
-    panic("stack is full");
+    error(NULL,"stack is full");
 }
 
 
