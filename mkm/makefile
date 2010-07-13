@@ -11,4 +11,4 @@ mkm: $(OBJS)
 all: mkm
 
 clean:
-	rm $(OBJS) ../bin/mkm
+	rm $(OBJS) 
