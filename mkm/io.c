@@ -4,6 +4,7 @@
 #include "io.h"
 
 #define FTAB_SIZE 10
+#define MAXBUF 512
 
 
 struct fnode{
@@ -62,7 +63,7 @@ int io_close(int i){
 
 int io_read(int i,u_val *u){
 
-  int sz,n;
+  int sz,n,c;
   char *buf;
 
   sz=sizeof(int);
@@ -74,14 +75,22 @@ int io_read(int i,u_val *u){
     return -1;
 
   if (u->type==INT){
-    buf=(char*)malloc(sizeof(sz));
+    buf=(char*)malloc(sizeof(int));
     n=read(ftab[i]->fd,buf,sz);
     u->data.ival=atoi(buf);
 
-  }else if (u->type==STRING)
-    return -1;
+  }else if (u->type==STRING){
+    buf=(char*)malloc(sizeof(char)*MAXBUF);
+    n=read(ftab[i]->fd,buf,MAXBUF);
+    for (c=0;c<MAXBUF;c++)
+      if (buf[c]=='\n')
+	break;
+    u->data.sval=(char*)malloc(sizeof(char)*c);
+    strncpy(u->data.sval,buf,c);
+    //u->data.sval[c]='\0';
+    return c;
 
-  else if (u->type==NULLVAL)
+  }else if (u->type==NULLVAL)
     return -1;
     
   return n;

@@ -3,6 +3,30 @@
 #include <string.h>
 #include "uval.h"
 
+
+void escapes(char **str){
+
+  char *p,*res,*aux;
+
+  res=(char*)malloc(strlen(*str));
+  aux=res;
+
+  for (p=*str;*p!='\0';p++){
+    if (*p=='\\'){ //escape secuence
+      p++;
+      if (*p=='n')
+	*res=0x0A;
+      //if (*p=='t')
+      //*res=0x09;
+    }else{
+      *res=*p;
+    }
+    res++;
+  }
+  *str=aux;
+}
+
+
 u_val get_u_val(char *arg){
 
   u_val u;
@@ -12,11 +36,13 @@ u_val get_u_val(char *arg){
   
   if ((arg[0]=='"') && (arg[strlen(arg)-1]=='"')){
     u.type=STRING;
-    u.data.sval=(char*)malloc(sizeof(char)*strlen(arg));
+    u.data.sval=(char*)malloc(strlen(arg));
     arg++;
     strcpy(u.data.sval,arg);
+    escapes(&u.data.sval);
+   
     u.data.sval[strlen(u.data.sval)-1]='\0';
-
+    printf ("[%s]\n",u.data.sval);
   }else{
     u.type=INT;
     u.data.ival=atoi(arg);
@@ -74,7 +100,7 @@ int u_val2bytes(u_val u,char **buf){
 
   if (u.type==STRING){
     strcpy(*buf,u.data.sval);
-    return sizeof(u.data.sval);
+    return strlen(u.data.sval);
   }
   else if (u.type==INT){
     sprintf (*buf,"%d",u.data.ival);

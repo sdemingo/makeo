@@ -4,12 +4,12 @@
 enum stype{INT,CHAR,FLOAT,STRING,NULLVAL};
 
 union tval{
-    int ival;
-    char cval;
-    float fval;
-    char *sval;
+  int ival;
+  char cval;
+  float fval;
+  char *sval;
+  int *uxval;
 };
-
 typedef union tval tval;
 
 

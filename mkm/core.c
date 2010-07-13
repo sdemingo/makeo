@@ -96,18 +96,14 @@ void io_op(com *c,tab *t){
 
     /* Write file */
   }else if(!strcmp(c->cmd,"write")){
-    if (!isvalidcom(c,2))
+    if (!isvalidcom(c,1))
       panic(c,"bad command");
-
     s=getsim(t,c->arg1);
     if (s==NULL)
       panic(c,"simbol not found");
     fd=s->val.data.ival;
-    s=getsim(t,c->arg2);
-    if (s==NULL)
-      panic(c,"simbol not found");
-    
-    if ((index=io_write(fd,s->val))<0)
+    u=pop();
+    if ((index=io_write(fd,u))<0)
       error ("error at write\n");
 
 
@@ -121,12 +117,9 @@ void io_op(com *c,tab *t){
     if (s==NULL)
       panic(c,"simbol not found");
     fd=s->val.data.ival;
-   
     u.type=u_valtype(c->arg2);
     if (isnull(u))
       panic(c,"bad command");
-
-    //pu=&u;
     
     if ((index=io_read(fd,&u))<0)
       error ("error at read\n");

@@ -6,7 +6,7 @@
 #define BUFSIZE 1024
 #define BRKLINE "\n"
 #define DELIM   " "
-#define ARG_LEN 25
+#define ARG_LEN 50
 #define NULL_TOKEN " "
 #define LINES 500
 
@@ -76,6 +76,7 @@ com *getcom(char *tok)
   com *c;
   char *cs=NULL,*a1=NULL,*a2=NULL;
   char *save;
+  char *m;
 
   if (tok==NULL)
     return NULL;
@@ -107,10 +108,18 @@ com *getcom(char *tok)
   }
 
   if (a1!=NULL){
-    a2=strtok_r(NULL,DELIM,&save);
-    if (a2!=NULL){
+    if ((m=index(save,'"'))!=NULL){
+      //segundo argumento entre comillas
+      a2=m;
       c->arg2=(char*)malloc(sizeof(char)*ARG_LEN);
       strcpy(c->arg2,a2);
+    }else{
+      //segundo argumento sin comillas
+      a2=strtok_r(NULL,DELIM,&save);
+      if (a2!=NULL){
+	c->arg2=(char*)malloc(sizeof(char)*ARG_LEN);
+	strcpy(c->arg2,a2);
+      }
     }
   }
 
@@ -163,7 +172,6 @@ int initparser(char *file,tab *t)
   }
 
   loadlabels(i,t);
-  
   
   s=getsim(t,"main");
   if (s==NULL)
