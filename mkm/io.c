@@ -92,9 +92,9 @@ int io_read(int i,u_val *u){
     for (c=0;c<MAXBUF;c++)
       if (buf[c]=='\n')
 	break;
-    u->data.sval=(char*)malloc(sizeof(char)*c);
+    u->data.sval=(char*)malloc(sizeof(char)*(c+1));
     strncpy(u->data.sval,buf,c);
-    //u->data.sval[c]='\0';
+    u->data.sval[c+1]='\0';
     return c;
 
   }else if (u->type==NULLVAL)

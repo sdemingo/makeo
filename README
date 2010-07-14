@@ -1,0 +1,38 @@
+
+	WHAT IS MAKEO
+
+It's a really simple stack-based virtual machine and a intermediate
+languaje interpreter named MK. You can see the reference of this
+simple language in the wiki of the project. It has not a particular
+target. I have made it, just for fun.
+
+In the future I hope to complete the global project with a
+compiler. The idea is to generate this MK code from a high-level
+language. This work will be harder. I expect to have enough energy to
+work on it.
+
+If you want to help me and learn some things about compilers and
+traductors, of course, you are invited ;-)
+
+
+
+	WRITING PROGRAMS
+
+MK is a simple language based on commands to a stack-based virtual
+machine.  You can take the examples code as a start point to write
+your first programs in MK. Our idea is to build a compiler that it
+generates  this MK programs from a high-level language but, by now, if
+you want to test the virtual machine, you must write your own codes on
+MK.
+
+All programs on MK must have a function named 'main' and if you want,
+more functions with any names. It is recommended to look the web reference
+in the wiki of the project.
+
+
+
+
+	REFERENCES
+
+ - http://code.google.com/p/makeo/
+ - http://sdemingo.blogspot.com/
