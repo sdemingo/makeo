@@ -5,7 +5,7 @@
 
 #define FTAB_SIZE 10
 #define MAXBUF 512
-
+#define IOERROR -1
 
 struct fnode{
   char *path;
@@ -38,7 +38,7 @@ int io_open(char* file){
 	  fd=open(file,flags, mode);
 
       if (fd<0)
-	return -1;
+	return IOERROR;
       
       ftab[i]=(fnode*)malloc(sizeof(fnode));
       ftab[i]->path=file;
@@ -46,8 +46,7 @@ int io_open(char* file){
       return i;
     }
   }
-  
-  return -1;
+  return IOERROR;
 }
 
 
@@ -62,7 +61,7 @@ int io_close(int i){
     ftab[i]=NULL;
     return 0;
   }else
-    return -1;
+    return IOERROR;
 }
 
 
@@ -76,10 +75,10 @@ int io_read(int i,u_val *u){
   sz=sizeof(int);
 
   if (isnull(*u))
-    return -1;
+    return IOERROR;
 
   if (ftab[i]==NULL)
-    return -1;
+    return IOERROR;
 
   if (u->type==INT){
     buf=(char*)malloc(sizeof(int));
@@ -98,7 +97,7 @@ int io_read(int i,u_val *u){
     return c;
 
   }else if (u->type==NULLVAL)
-    return -1;
+    return IOERROR;
     
   return n;
 }
