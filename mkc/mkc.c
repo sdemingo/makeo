@@ -1,8 +1,17 @@
 #include <stdio.h>
 
-int main (int argc, char **argv){
+extern FILE *yyin;
 
-  printf ("The force is with you, young Skywalker, but you are not a Jedi yet.\n");
+
+int main (int argc, char **argv){
+ 
+  ++argv, --argc; /* se salta el nombre del programa */
+  if ( argc > 0 )
+    yyin = fopen( argv[0], "r" );
+  else
+    yyin = stdin;
+  
+  yylex();
   
   return 0;
 }
