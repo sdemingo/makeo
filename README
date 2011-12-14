@@ -6,10 +6,9 @@ languaje interpreter named MK. You can see the reference of this
 simple language in the wiki of the project. It has not a particular
 target. I have made it, just for fun.
 
-In the future I hope to complete the global project with a
-compiler. The idea is to generate this MK code from a high-level
-language. This work will be harder. I expect to have enough energy to
-work on it.
+In the future I hope to complete the project with a compiler. The idea
+is to generate this MK code from a high-level language. This work will
+be harder. I expect to have enough energy to work on it.
 
 If you want to help me and learn some things about compilers and
 traductors, of course, you are invited ;-)
@@ -26,13 +25,16 @@ you want to test the virtual machine, you must write your own codes on
 MK.
 
 All programs on MK must have a function named 'main' and if you want,
-more functions with any names. It is recommended to look the web reference
-in the wiki of the project.
+more functions with any names. It is recommended to look the web
+reference in the wiki of the project.
 
+To run an MK code you have to use mkm tool:
+
+   $ mkm examples/stdio.vm
 
 
 
 	REFERENCES
 
- - http://code.google.com/p/makeo/
- - http://sdemingo.blogspot.com/
+ - https://bitbucket.org/sdemingo/makeo
+ - https://sites.google.com/site/sdemingo/
