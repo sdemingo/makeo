@@ -30,7 +30,7 @@ push const 11
 call sum  
 pop res
 
-push const "hola que tal\nYo\tmuy bien\n"
+push const "Este es el resultado de sum:\n"
 pop cad
 
 #abro y escribo el fichero
@@ -40,4 +40,16 @@ open file
 pop fd
 push sim cad
 write fd
+
+# escribo el resultado de la funcion sum
+push sim res
+write fd
+
+# escribo otro string y cierro el fichero
+push const "\nCierro el fichero\n"
+pop cad
+
+push sim cad
+write fd
+
 close fd

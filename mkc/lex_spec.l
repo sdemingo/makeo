@@ -4,17 +4,20 @@
 #include <math.h>
 %}
 
+BLANK    [\t ]
 DIGITO   [0-9]
 ID       [a-z][a-z0-9]*
 
 
 %%
 
-[\t ]+             /* noting */
+{BLANK}+           /* blank caracter - noting */
 
-^\n                /* noting */
+{BLANK}+\n         /* blank line - noting */
 
-\n                 printf("[END_SENT]\n");
+^\n                /* blank line - noting */
+
+{BLANK}+"#".+      /* comment - noting */
 
 "function"         printf( "[FUNC_DEF]\n");
 
@@ -50,6 +53,8 @@ ID       [a-z][a-z0-9]*
 "/"                printf( "[DIV]\n"); 
               
 "'".+[^']"'"       printf("[STRING] (%s)\n",yytext);
+
+\n                printf("[END_SENT]\n");
 
 .                  printf( "[UNKNOW] value:%s\n", yytext );
      
