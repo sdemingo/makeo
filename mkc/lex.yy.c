@@ -1,6 +1,5 @@
-#line 2 "lex.c"
 
-#line 4 "lex.c"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -497,7 +496,9 @@ char *yytext;
 #line 3 "lex_spec.l"
 
 #include <math.h>
-#line 501 "lex.c"
+#include "y.tab.h"
+
+#line 502 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -687,10 +688,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 12 "lex_spec.l"
+#line 14 "lex_spec.l"
 
 
-#line 694 "lex.c"
+#line 695 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -776,129 +777,129 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 14 "lex_spec.l"
+#line 16 "lex_spec.l"
 /* blank caracter - noting */
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 16 "lex_spec.l"
+#line 18 "lex_spec.l"
 /* blank line - noting */
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 18 "lex_spec.l"
+#line 20 "lex_spec.l"
 /* blank line - noting */
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 20 "lex_spec.l"
+#line 22 "lex_spec.l"
 /* comment - noting */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 22 "lex_spec.l"
+#line 24 "lex_spec.l"
 printf( "[FUNC_DEF]\n");
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 24 "lex_spec.l"
+#line 26 "lex_spec.l"
 printf( "[RET_DEF]\n");
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 26 "lex_spec.l"
+#line 28 "lex_spec.l"
 printf("[IF]\n");
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "lex_spec.l"
+#line 30 "lex_spec.l"
 printf("[WHILE]\n");
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 30 "lex_spec.l"
+#line 32 "lex_spec.l"
 printf("[PAR_A]\n");
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 32 "lex_spec.l"
+#line 34 "lex_spec.l"
 printf("[PAR_B]\n");
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 34 "lex_spec.l"
+#line 36 "lex_spec.l"
 printf("[BLOCK_START]\n");
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 36 "lex_spec.l"
+#line 38 "lex_spec.l"
 printf("[BLOCK_END]\n");
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 38 "lex_spec.l"
+#line 40 "lex_spec.l"
 printf("[ASIG]\n");
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 41 "lex_spec.l"
+#line 43 "lex_spec.l"
 printf( "[INT] (%s)\n", yytext);
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 43 "lex_spec.l"
+#line 45 "lex_spec.l"
 printf( "[FLOAT] (%s)\n", yytext);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 45 "lex_spec.l"
+#line 47 "lex_spec.l"
 printf( "[ID] (%s)\n", yytext);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 47 "lex_spec.l"
+#line 49 "lex_spec.l"
 printf( "[ADD]\n");
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 49 "lex_spec.l"
+#line 51 "lex_spec.l"
 printf( "[SUB]\n"); 
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 51 "lex_spec.l"
+#line 53 "lex_spec.l"
 printf( "[MUL]\n"); 
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 53 "lex_spec.l"
+#line 55 "lex_spec.l"
 printf( "[DIV]\n"); 
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 55 "lex_spec.l"
+#line 57 "lex_spec.l"
 printf("[STRING] (%s)\n",yytext);
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 57 "lex_spec.l"
+#line 59 "lex_spec.l"
 printf("[END_SENT]\n");
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 59 "lex_spec.l"
+#line 61 "lex_spec.l"
 printf( "[UNKNOW] value:%s\n", yytext );
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 62 "lex_spec.l"
+#line 64 "lex_spec.l"
 ECHO;
 	YY_BREAK
-#line 902 "lex.c"
+#line 903 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1899,7 +1900,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 62 "lex_spec.l"
+#line 64 "lex_spec.l"
 
 
 
