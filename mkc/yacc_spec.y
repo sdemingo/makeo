@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern int yylineno;
 
 void yyerror(const char *str)
 {
-        fprintf(stderr,"error: %s\n",str);
+  fprintf(stderr,"line %d: %s\n",yylineno,str);
 }
  
 
@@ -28,4 +29,5 @@ EXP: INT                    {printf ("int:%d\n",yyval);}
 
 
 %% 
+
 

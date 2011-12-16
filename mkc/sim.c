@@ -20,10 +20,7 @@ void addsim(char *sim){
     simtab[last].name=malloc(strlen(sim));
     simtab[last].name=strcpy(simtab[last].name,sim);
     last++;
-    printf ("Simbolo añadido\n");
   }
-
- 
 
   //error
 }

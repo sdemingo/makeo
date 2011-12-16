@@ -73,17 +73,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern int yylineno;
 
 void yyerror(const char *str)
 {
-        fprintf(stderr,"error: %s\n",str);
+  fprintf(stderr,"line %d: %s\n",yylineno,str);
 }
  
 
 
 
 /* Line 189 of yacc.c  */
-#line 87 "y.tab.c"
+#line 88 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -135,7 +136,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 139 "y.tab.c"
+#line 140 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -418,7 +419,7 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    20,    20,    23,    26
+       0,    21,    21,    24,    27
 };
 #endif
 
@@ -1314,21 +1315,21 @@ yyreduce:
         case 3:
 
 /* Line 1455 of yacc.c  */
-#line 23 "yacc_spec.y"
+#line 24 "yacc_spec.y"
     { }
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 26 "yacc_spec.y"
+#line 27 "yacc_spec.y"
     {printf ("int:%d\n",yyval);}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1332 "y.tab.c"
+#line 1333 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1540,7 +1541,8 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 30 "yacc_spec.y"
+#line 31 "yacc_spec.y"
  
+
 
 

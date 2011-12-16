@@ -4,6 +4,8 @@
 #include <math.h>
 #include "y.tab.h"
 
+int yylineno;
+
 %}
 
 BLANK    [\t ]
