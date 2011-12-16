@@ -2,7 +2,6 @@
 
 extern FILE *yyin;
 
-
 int main (int argc, char **argv){
  
   ++argv, --argc; /* se salta el nombre del programa */
@@ -13,6 +12,8 @@ int main (int argc, char **argv){
   
   //yylex();
   yyparse();
+
+  dump();
   
   return 0;
 }

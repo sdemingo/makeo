@@ -1,20 +1,28 @@
 
-OBJS = mkc.o lex.yy.o y.tab.o
+OBJS = mkc.o sim.o lex.yy.o y.tab.o
 
+HDR = sim.h y.tab.h
 
 mkc: $(OBJS)
-	gcc -g $(OBJS) -o ../bin/mkc
+	gcc $(FLAGS) -g $(OBJS) -o ../bin/mkc
 
-lex.yy.c: lex_spec.l y.tab.c
+lex.yy.c: lex_spec.l y.tab.c $(HDR)
 	flex lex_spec.l
 
-y.tab.c: yacc_spec.y
+
+y.tab.c: yacc_spec.y $(HDR)
 	yacc -d yacc_spec.y 
 
+
+
 %.o: %.c
-	gcc -g -c $< -o $@
+	gcc $(FLAGS) -g -c $< -o $@
 
 all: mkc
 
 clean:
 	rm $(OBJS) 
+
+purge: clean
+	rm ../bin/mkc
+

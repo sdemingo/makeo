@@ -8,7 +8,7 @@
 
 BLANK    [\t ]
 DIGITO   [0-9]
-ID       [a-z][a-z0-9]*
+ID       [a-z0-9]*
 
 
 %%
@@ -37,14 +37,14 @@ ID       [a-z][a-z0-9]*
 
 "}"                printf("[BLOCK_END]\n");
 
-"="                printf("[ASIG]\n");
+"="                {yylval=ASIG_OP; return ASIG_OP;}
 
 
-{DIGITO}+                   printf( "[INT] (%s)\n", yytext);
+{DIGITO}+                   {yylval=atoi(yytext); return INT;}
 
 {DIGITO}+.{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 
-{ID}               printf( "[ID] (%s)\n", yytext);
+{ID}               { addsim(yytext); return ID;}
 
 "+"                printf( "[ADD]\n");
 
@@ -56,7 +56,7 @@ ID       [a-z][a-z0-9]*
               
 "'".+[^']"'"       printf("[STRING] (%s)\n",yytext);
 
-\n                printf("[END_SENT]\n");
+\n                 printf("[END_SENT]\n");
 
 .                  printf( "[UNKNOW] value:%s\n", yytext );
      

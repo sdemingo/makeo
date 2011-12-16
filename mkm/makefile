@@ -12,3 +12,6 @@ all: mkm
 
 clean:
 	rm $(OBJS) 
+
+purge:	clean
+	rm ../bin/mkm

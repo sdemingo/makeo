@@ -2,24 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-  //int yylex(void);
 
 void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
 }
  
-/* int yywrap() */
-/* { */
-/*         return 1; */
-/* } */
-  
-/* main() */
-/* { */
-/*         yyparse(); */
-/* }  */
-
-
 
 %}
 
@@ -29,7 +17,14 @@ void yyerror(const char *str)
 
 %%
 
-ASIG: ID ASIG_OP INT        {printf (" asignación\n");}
+SENT : ASIG
+;
+
+ASIG: ID ASIG_OP EXP        { }
+;
+
+EXP: INT                    {printf ("int:%d\n",yyval);}
+;
 
 
 %% 
