@@ -12,19 +12,29 @@ void yyerror(const char *str)
 
 %}
 
-%token ID
+%union {
+  int ival;
+  int sval;  //simbol index
+};
+
+
+%token <sval> ID
 %token ASIG_OP
-%token INT
+%token <ival> INT
+
+
+%type <ival> EXP
+
 
 %%
 
-SENT : ASIG
+SENT : ASIG | SENT ASIG
 ;
 
-ASIG: ID ASIG_OP EXP        { }
+ASIG: ID ASIG_OP EXP        {printf("%s=%d\n",getsim($1),$3);}
 ;
 
-EXP: INT                    {printf ("int:%d\n",yyval);}
+EXP: INT                    {$$=$1;}
 ;
 
 

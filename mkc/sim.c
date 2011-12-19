@@ -14,22 +14,27 @@ struct Sim simtab[MAX_SIM];
 int last = 0;
 
 
-void addsim(char *sim){
+int addsim(char *sim){
   
-  if (last<MAX_SIM){
-    simtab[last].name=malloc(strlen(sim));
-    simtab[last].name=strcpy(simtab[last].name,sim);
-    last++;
-  }
+  int id=last;
 
+  if (last<MAX_SIM){
+    simtab[id].name=malloc(strlen(sim));
+    simtab[id].name=strcpy(simtab[last].name,sim);
+    last++;
+    return id;
+  }
+  return -1;
   //error
 }
 
 
 char *getsim(int id)
 {
-
-  return "";
+  if ((id<0) || (id>=MAX_SIM))
+    return "";
+  
+  return simtab[id].name;
 }
 
 

@@ -39,14 +39,14 @@ ID       [a-z0-9]*
 
 "}"                printf("[BLOCK_END]\n");
 
-"="                {yylval=ASIG_OP; return ASIG_OP;}
+"="                {return ASIG_OP;}
 
 
-{DIGITO}+                   {yylval=atoi(yytext); return INT;}
+{DIGITO}+                   {yylval.ival=atoi(yytext); return INT;}
 
 {DIGITO}+.{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 
-{ID}               { addsim(yytext); return ID;}
+{ID}               {yylval.sval=addsim(yytext); return ID;}
 
 "+"                printf( "[ADD]\n");
 
@@ -69,6 +69,8 @@ int yywrap()
 {
    return(1);
 }
+
+
 
 
 /*

@@ -1,6 +1,6 @@
 
 
-void addsim(char *sim);
+int addsim(char *sim);
 
 char *getsim(int id);
 

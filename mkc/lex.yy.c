@@ -848,12 +848,12 @@ printf("[BLOCK_END]\n");
 case 13:
 YY_RULE_SETUP
 #line 42 "lex_spec.l"
-{yylval=ASIG_OP; return ASIG_OP;}
+{return ASIG_OP;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 45 "lex_spec.l"
-{yylval=atoi(yytext); return INT;}
+{yylval.ival=atoi(yytext); return INT;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
@@ -863,7 +863,7 @@ printf( "[FLOAT] (%s)\n", yytext);
 case 16:
 YY_RULE_SETUP
 #line 49 "lex_spec.l"
-{ addsim(yytext); return ID;}
+{yylval.sval=addsim(yytext); return ID;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
@@ -1916,6 +1916,8 @@ int yywrap()
 {
    return(1);
 }
+
+
 
 
 /*
