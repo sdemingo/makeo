@@ -808,42 +808,42 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 26 "lex_spec.l"
-printf( "[FUNC_DEF]\n");
+return FUNCTION;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 28 "lex_spec.l"
-printf( "[RET_DEF]\n");
+//printf( "[RET_DEF]\n");
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 30 "lex_spec.l"
-printf("[IF]\n");
+//printf("[IF]\n");
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 32 "lex_spec.l"
-printf("[WHILE]\n");
+//printf("[WHILE]\n");
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 34 "lex_spec.l"
-printf("[PAR_A]\n");
+//printf("[PAR_A]\n");
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 36 "lex_spec.l"
-printf("[PAR_B]\n");
+//printf("[PAR_B]\n");
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 38 "lex_spec.l"
-printf("[BLOCK_START]\n");
+return BLOCK_START;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 40 "lex_spec.l"
-printf("[BLOCK_END]\n");
+return BLOCK_END;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
@@ -868,39 +868,39 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 51 "lex_spec.l"
-printf( "[ADD]\n");
+return ADD;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 53 "lex_spec.l"
-printf( "[SUB]\n"); 
+//printf( "[SUB]\n"); 
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 55 "lex_spec.l"
-printf( "[MUL]\n"); 
+//printf( "[MUL]\n"); 
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 57 "lex_spec.l"
-printf( "[DIV]\n"); 
+//printf( "[DIV]\n"); 
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
 #line 59 "lex_spec.l"
-printf("[STRING] (%s)\n",yytext);
+//printf("[STRING] (%s)\n",yytext);
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
 #line 61 "lex_spec.l"
-printf("[END_SENT]\n");
+//return END_SENT;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 63 "lex_spec.l"
-printf( "[UNKNOW] value:%s\n", yytext );
+//printf( "[UNKNOW] value:%s\n", yytext );
 	YY_BREAK
 case 24:
 YY_RULE_SETUP

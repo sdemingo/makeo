@@ -1,6 +1,7 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 extern int yylineno;
 
@@ -22,22 +23,38 @@ void yyerror(const char *str)
 %token ASIG_OP
 %token <ival> INT
 
+%token ADD
+%token END_SENT
+
+%token FUNCTION
+%token BLOCK_START
+%token BLOCK_END
 
 %type <ival> EXP
 
 
 %%
 
-SENT : ASIG | SENT ASIG
+PROGRAM : FUNC             
 ;
 
-ASIG: ID ASIG_OP EXP        {printf("%s=%d\n",getsim($1),$3);}
+FUNC: FUNCTION ID BLOCK_START SENT BLOCK_END  {printf("function main\n");}
 ;
 
-EXP: INT                    {$$=$1;}
+SENT : ASIG | SENT ASIG       
+;
+
+ASIG: ID ASIG_OP EXP          {printf("pop %s\n",getsim($1));}
+;
+
+EXP:   INT                    {$$=$1; printf ("push const %d\n",$1);}
+| ID                     {printf ("push sim %s\n",getsim($1));}
+| ID ADD EXP             {printf ("push sim %s\n",getsim($1)); printf ("add\n"); }
+| INT ADD EXP             {printf ("push const %d\n",$1); printf ("add\n"); }
 ;
 
 
 %% 
+
 
 

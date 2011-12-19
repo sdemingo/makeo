@@ -23,21 +23,21 @@ ID       [a-z0-9]*
 
 {BLANK}+"#".+      /* comment - noting */
 
-"function"         printf( "[FUNC_DEF]\n");
+"function"         return FUNCTION;
 
-"return"           printf( "[RET_DEF]\n");
+"return"           //printf( "[RET_DEF]\n");
 
-"if"               printf("[IF]\n");
+"if"               //printf("[IF]\n");
 
-"while"            printf("[WHILE]\n");
+"while"            //printf("[WHILE]\n");
 
-"("                printf("[PAR_A]\n");
+"("                //printf("[PAR_A]\n");
 
-")"                printf("[PAR_B]\n");
+")"                //printf("[PAR_B]\n");
 
-"{"                printf("[BLOCK_START]\n");
+"{"                return BLOCK_START;
 
-"}"                printf("[BLOCK_END]\n");
+"}"                return BLOCK_END;
 
 "="                {return ASIG_OP;}
 
@@ -48,19 +48,19 @@ ID       [a-z0-9]*
 
 {ID}               {yylval.sval=addsim(yytext); return ID;}
 
-"+"                printf( "[ADD]\n");
+"+"                return ADD;
 
-"-"                printf( "[SUB]\n"); 
+"-"                //printf( "[SUB]\n"); 
 
-"*"                printf( "[MUL]\n"); 
+"*"                //printf( "[MUL]\n"); 
 
-"/"                printf( "[DIV]\n"); 
+"/"                //printf( "[DIV]\n"); 
               
-"'".+[^']"'"       printf("[STRING] (%s)\n",yytext);
+"'".+[^']"'"       //printf("[STRING] (%s)\n",yytext);
 
-\n                 printf("[END_SENT]\n");
+\n                 //return END_SENT;
 
-.                  printf( "[UNKNOW] value:%s\n", yytext );
+.                  //printf( "[UNKNOW] value:%s\n", yytext );
      
    
 %%

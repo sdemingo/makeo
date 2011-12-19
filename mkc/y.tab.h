@@ -41,13 +41,23 @@
    enum yytokentype {
      ID = 258,
      ASIG_OP = 259,
-     INT = 260
+     INT = 260,
+     ADD = 261,
+     END_SENT = 262,
+     FUNCTION = 263,
+     BLOCK_START = 264,
+     BLOCK_END = 265
    };
 #endif
 /* Tokens.  */
 #define ID 258
 #define ASIG_OP 259
 #define INT 260
+#define ADD 261
+#define END_SENT 262
+#define FUNCTION 263
+#define BLOCK_START 264
+#define BLOCK_END 265
 
 
 
@@ -57,7 +67,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 15 "yacc_spec.y"
+#line 16 "yacc_spec.y"
 
   int ival;
   int sval;  //simbol index
@@ -65,7 +75,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 69 "y.tab.h"
+#line 79 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

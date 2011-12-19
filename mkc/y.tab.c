@@ -72,6 +72,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 extern int yylineno;
 
@@ -84,7 +85,7 @@ void yyerror(const char *str)
 
 
 /* Line 189 of yacc.c  */
-#line 88 "y.tab.c"
+#line 89 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -113,13 +114,23 @@ void yyerror(const char *str)
    enum yytokentype {
      ID = 258,
      ASIG_OP = 259,
-     INT = 260
+     INT = 260,
+     ADD = 261,
+     END_SENT = 262,
+     FUNCTION = 263,
+     BLOCK_START = 264,
+     BLOCK_END = 265
    };
 #endif
 /* Tokens.  */
 #define ID 258
 #define ASIG_OP 259
 #define INT 260
+#define ADD 261
+#define END_SENT 262
+#define FUNCTION 263
+#define BLOCK_START 264
+#define BLOCK_END 265
 
 
 
@@ -129,7 +140,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 15 "yacc_spec.y"
+#line 16 "yacc_spec.y"
 
   int ival;
   int sval;  //simbol index
@@ -137,7 +148,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 141 "y.tab.c"
+#line 152 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -149,7 +160,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 153 "y.tab.c"
+#line 164 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -364,20 +375,20 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   5
+#define YYLAST   18
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  6
+#define YYNTOKENS  11
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  5
+#define YYNRULES  10
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  9
+#define YYNSTATES  20
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   260
+#define YYMAXUTOK   265
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -411,7 +422,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5
+       5,     6,     7,     8,     9,    10
 };
 
 #if YYDEBUG
@@ -419,20 +430,24 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     5,     8,    12
+       0,     0,     3,     5,    11,    13,    16,    20,    22,    24,
+      28
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-       7,     0,    -1,     8,    -1,     7,     8,    -1,     3,     4,
-       9,    -1,     5,    -1
+      12,     0,    -1,    13,    -1,     8,     3,     9,    14,    10,
+      -1,    15,    -1,    14,    15,    -1,     3,     4,    16,    -1,
+       5,    -1,     3,    -1,     3,     6,    16,    -1,     5,     6,
+      16,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    31,    31,    31,    34,    37
+       0,    38,    38,    41,    44,    44,    47,    50,    51,    52,
+      53
 };
 #endif
 
@@ -441,8 +456,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "ID", "ASIG_OP", "INT", "$accept",
-  "SENT", "ASIG", "EXP", 0
+  "$end", "error", "$undefined", "ID", "ASIG_OP", "INT", "ADD",
+  "END_SENT", "FUNCTION", "BLOCK_START", "BLOCK_END", "$accept", "PROGRAM",
+  "FUNC", "SENT", "ASIG", "EXP", 0
 };
 #endif
 
@@ -451,20 +467,23 @@ static const char *const yytname[] =
    token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+     265
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     6,     7,     7,     8,     9
+       0,    11,    12,    13,    14,    14,    15,    16,    16,    16,
+      16
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     2,     3,     1
+       0,     2,     1,     5,     1,     2,     3,     1,     1,     3,
+       3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -472,27 +491,29 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     2,     0,     1,     3,     5,     4
+       0,     0,     0,     2,     0,     1,     0,     0,     0,     4,
+       0,     3,     5,     8,     7,     6,     0,     0,     9,    10
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,     8
+      -1,     2,     3,     8,     9,    15
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -4
+#define YYPACT_NINF -13
 static const yytype_int8 yypact[] =
 {
-      -2,     1,     0,    -4,    -3,    -4,    -4,    -4,    -4
+      -6,     3,     8,   -13,     0,   -13,     7,     9,    -3,   -13,
+      -2,   -13,   -13,     5,     6,   -13,    -2,    -2,   -13,   -13
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,     2,    -4
+     -13,   -13,   -13,   -13,    10,   -12
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -502,19 +523,22 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       5,     1,     7,     1,     6,     4
+       7,    13,     1,    14,    18,    19,     4,    11,     5,     6,
+       7,    16,    17,    10,     0,     0,     0,     0,    12
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-       0,     3,     5,     3,     2,     4
+       3,     3,     8,     5,    16,    17,     3,    10,     0,     9,
+       3,     6,     6,     4,    -1,    -1,    -1,    -1,     8
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     3,     7,     8,     4,     0,     8,     5,     9
+       0,     8,    12,    13,     3,     0,     9,     3,    14,    15,
+       4,    10,    15,     3,     5,    16,     6,     6,    16,    16
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1325,24 +1349,52 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 4:
+        case 3:
 
 /* Line 1455 of yacc.c  */
-#line 34 "yacc_spec.y"
-    {printf("%s=%d\n",getsim((yyvsp[(1) - (3)].sval)),(yyvsp[(3) - (3)].ival));}
+#line 41 "yacc_spec.y"
+    {printf("function main\n");}
     break;
 
-  case 5:
+  case 6:
 
 /* Line 1455 of yacc.c  */
-#line 37 "yacc_spec.y"
-    {(yyval.ival)=(yyvsp[(1) - (1)].ival);}
+#line 47 "yacc_spec.y"
+    {printf("pop %s\n",getsim((yyvsp[(1) - (3)].sval)));}
+    break;
+
+  case 7:
+
+/* Line 1455 of yacc.c  */
+#line 50 "yacc_spec.y"
+    {(yyval.ival)=(yyvsp[(1) - (1)].ival); printf ("push const %d\n",(yyvsp[(1) - (1)].ival));}
+    break;
+
+  case 8:
+
+/* Line 1455 of yacc.c  */
+#line 51 "yacc_spec.y"
+    {printf ("push sim %s\n",getsim((yyvsp[(1) - (1)].sval)));}
+    break;
+
+  case 9:
+
+/* Line 1455 of yacc.c  */
+#line 52 "yacc_spec.y"
+    {printf ("push sim %s\n",getsim((yyvsp[(1) - (3)].sval))); printf ("add\n"); }
+    break;
+
+  case 10:
+
+/* Line 1455 of yacc.c  */
+#line 53 "yacc_spec.y"
+    {printf ("push const %d\n",(yyvsp[(1) - (3)].ival)); printf ("add\n"); }
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1346 "y.tab.c"
+#line 1398 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1554,8 +1606,9 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 41 "yacc_spec.y"
+#line 57 "yacc_spec.y"
  
+
 
 
 

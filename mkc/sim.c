@@ -15,7 +15,11 @@ int last = 0;
 
 
 int addsim(char *sim){
+  int i;
   
+  if ((i=exists(sim))>=0)
+    return i;
+
   int id=last;
 
   if (last<MAX_SIM){
@@ -47,4 +51,15 @@ void dump(){
     printf ("     %s\n",simtab[i].name);
   }
   printf ("\n");
+}
+
+
+int exists(char *simname){
+  int i;
+
+  for (i=0;i<last;i++){
+    if (strcmp(simtab[i].name,simname)==0)
+      return i;
+  }
+  return -1;
 }

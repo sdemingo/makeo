@@ -13,7 +13,7 @@ int main (int argc, char **argv){
   //yylex();
   yyparse();
 
-  dump();
+  //dump();
   
   return 0;
 }
