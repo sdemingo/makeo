@@ -46,7 +46,7 @@ ID       [a-z0-9]*
 
 {DIGITO}+.{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 
-{ID}               {yylval.sval=addsim(yytext); return ID;}
+{ID}               {yylval.sval=addsim(yytext);return ID;}
 
 "+"                return ADD;
 

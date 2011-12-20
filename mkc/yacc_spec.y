@@ -35,13 +35,19 @@ void yyerror(const char *str)
 
 %%
 
-PROGRAM : FUNC             
+PROGRAM : BLOCK_CODE           
 ;
 
-FUNC: FUNCTION ID BLOCK_START SENT BLOCK_END  {printf("function main\n");}
+BLOCK_CODE: INIT_STRUCT BLOCK_START SENT BLOCK_END 
 ;
 
-SENT : ASIG | SENT ASIG       
+INIT_STRUCT: FUNCTION ID       {printf("function main\n");} 
+/* Para este no terminal añadiremos más producciones para cada bloque
+con inicio especial como while, for, ifs, ...  */
+;
+
+SENT : SENT ASIG       
+| /* vacio */
 ;
 
 ASIG: ID ASIG_OP EXP          {printf("pop %s\n",getsim($1));}
@@ -50,7 +56,7 @@ ASIG: ID ASIG_OP EXP          {printf("pop %s\n",getsim($1));}
 EXP:   INT                    {$$=$1; printf ("push const %d\n",$1);}
 | ID                     {printf ("push sim %s\n",getsim($1));}
 | ID ADD EXP             {printf ("push sim %s\n",getsim($1)); printf ("add\n"); }
-| INT ADD EXP             {printf ("push const %d\n",$1); printf ("add\n"); }
+| INT ADD EXP            {printf ("push const %d\n",$1); printf ("add\n"); }
 ;
 
 

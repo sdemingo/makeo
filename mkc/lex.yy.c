@@ -863,7 +863,7 @@ printf( "[FLOAT] (%s)\n", yytext);
 case 16:
 YY_RULE_SETUP
 #line 49 "lex_spec.l"
-{yylval.sval=addsim(yytext); return ID;}
+{yylval.sval=addsim(yytext);return ID;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
