@@ -10,6 +10,9 @@ int main (int argc, char **argv){
     yyin = fopen( argv[0], "r" );
   else
     yyin = stdin;
+
+  out=fopen("/tmp/salida.vm","w");
+  //  out=stdout;
   
   yyparse();
 

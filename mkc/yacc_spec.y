@@ -5,6 +5,8 @@
 
 extern int yylineno;
 
+ FILE *out;
+
 
  void yyerror(const char *str)
  {
@@ -12,8 +14,6 @@ extern int yylineno;
  }
  
  void encode(char *fmt,...){
-
-   FILE *out = stdout;
 
    va_list ap;
    char *p, *sval;

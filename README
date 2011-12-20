@@ -15,22 +15,26 @@ traductors, of course, you are invited ;-)
 
 
 
-	WRITING PROGRAMS
+	EXECUTING MK PROGRAMS
 
-MK is a simple language based on commands to a stack-based virtual
-machine.  You can take the examples code as a start point to write
-your first programs in MK. Our idea is to build a compiler that it
-generates  this MK programs from a high-level language but, by now, if
-you want to test the virtual machine, you must write your own codes on
-MK.
+MK is a simple high-level programing language. Before you can execute
+a program, you must compile it. To compile a MK program you have to
+use the mkc tool. This tool compile your MK code into a IL or
+intermediate code based on commands to a stack-based virtual machine.
 
-All programs on MK must have a function named 'main' and if you want,
-more functions with any names. It is recommended to look the web
-reference in the wiki of the project.
+To compile a MK code use mkc tool:
+   
+   $mkc examples/program.mk -o /tmp/program.il
 
-To run an MK code you have to use mkm tool:
+Now, you can run your program with mkm tool:
 
-   $ mkm examples/stdio.vm
+   $ mkm /tmp/program.il
+
+You can use the following flags with mkm:
+
+    -v: print all line read from the input
+
+    -m: print all symbols on the symbol table with theirs values
 
 
 
