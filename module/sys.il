@@ -1,5 +1,12 @@
+
 function write
-pop fd
+pop o
 pop w_data
-write fd w_data
+open o
+pop fd
+push sim w_data
+write fd
+push const "\n"
+write fd
+return const 0
 

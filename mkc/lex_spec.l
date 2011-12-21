@@ -43,6 +43,11 @@ ID       [a-z0-9]*
 
 ","                return COMA;
 
+"'".+[^']"'"     {
+                    yylval.literal=(char*)malloc(strlen(yytext)+1);
+                    yylval.literal=strcpy(yylval.literal,yytext);
+                    return STRING;
+                   }   
 
 {DIGITO}+                   {yylval.ival=atoi(yytext); return INT;}
 
@@ -61,8 +66,6 @@ ID       [a-z0-9]*
 "*"                //printf( "[MUL]\n"); 
 
 "/"                //printf( "[DIV]\n"); 
-              
-"'".+[^']"'"       //printf("[STRING] (%s)\n",yytext);
 
 \n                 //return END_SENT;
 

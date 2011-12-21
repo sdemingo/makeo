@@ -12,7 +12,6 @@ function suma(a,b,c)
 
 function main()
 {
-	a=0
 	b=1
-	c=suma(a,b,6)
+	o=write('out',b)
 }

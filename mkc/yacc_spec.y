@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include "sim.h"
 
 extern int yylineno;
@@ -46,28 +47,38 @@ void encode(char *fmt,...){
 /* Con este metodo realizamos el linkado de los diferentes archivos */
 /* referenciados en la cabecera de nuestro programa */
 
-void link_mod(char *modfile){
+void link_mod(char *mod){
 
   FILE *fd;
   char buf[512];
+  char *modpath;
   int n;
+  char rc;
 
-  fd=fopen(modfile,"r");
+  modpath=getenv("MKPATH");
+  modpath=strcat(modpath,"/module/");
+  modpath=strcat(modpath,mod);
+
+  fd=fopen(modpath,"r");
 
   if (fd==NULL)
     yyerror("Module file not found");
-  
-  while((n=read(fd,buf,512))>0)
-    write(stdout,buf,n);
-  
+
+  fputc('\n',out);
+  for (; (rc = getc(fd)) != EOF;)
+    fputc(rc,out);
+
+  fputc('\n',out);
+       
   close(fd);
 }
 
 %}
 %union {
-    int ival;
-    int sval;  //simbol index
-    int sim_v [10]; //vector de indices de simbols
+  int ival;
+  int sval;  //simbol index
+  int sim_v [10]; //vector de indices de simbols
+  char *literal;
 };
 
 
@@ -77,6 +88,7 @@ void link_mod(char *modfile){
 
 %token ADD
 %token END_SENT
+%token STRING
 
 %token FUNCTION
 %token RETURN
@@ -88,6 +100,7 @@ void link_mod(char *modfile){
 %token COMA
 
 %type <ival> EXP
+%type <literal> STRING
 
 
 %%
@@ -100,11 +113,12 @@ FUNC_MAIN_CODE: FUNC_MAIN_HDR BLOCK_START BLOCK_SENT BLOCK_END
 		/*|  error  {yyerror("Falta funcion main");exit(-1);}  */
 ;
 
-FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {link_mod("module/sys.il");encode("function main\n");} 
+
+FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {link_mod("sys.il");encode("function main\n");} 
 ;
 
 
-FUNCS : FUNC_CODE | FUNCS FUNC_CODE
+FUNCS : FUNC_CODE | FUNCS FUNC_CODE              
 ;
 
 
@@ -176,6 +190,8 @@ PARAM_CALL: ID                              {encode("push sim %s\n",getsim($1)->
 | ID COMA PARAM_CALL                        {encode("push sim %s\n",getsim($1)->name); }
 | INT                                       {encode("push const %d\n",$1); }
 | INT COMA PARAM_CALL                       {encode("push const %d\n",$1); }
+| STRING                                    {encode("push const %s\n",$1); }
+| STRING COMA PARAM_CALL                    {encode("push const %s\n",$1); }
 
 
 

@@ -34,7 +34,8 @@ u_val get_u_val(char *arg){
   if (arg==NULL)  
     return null_u_val();
   
-  if ((arg[0]=='"') && (arg[strlen(arg)-1]=='"')){
+  if (((arg[0]=='\'') && (arg[strlen(arg)-1]=='\'')) 
+      ||((arg[0]=='"') && (arg[strlen(arg)-1]=='"')) ){
     u.type=STRING;
     u.data.sval=(char*)malloc(strlen(arg));
     arg++;

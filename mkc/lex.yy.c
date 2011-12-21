@@ -379,12 +379,12 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[59] =
     {   0,
-       17,   17,   26,   24,    1,   23,   24,    9,   10,   20,
-       18,   14,   19,   21,   15,   13,   17,   17,   17,   17,
-       17,   11,   12,    3,    1,    2,    0,    0,    0,   15,
-       17,   17,   17,    7,   17,   17,    4,    0,    0,   16,
-       15,   16,   17,   17,   17,   22,   22,   17,   17,   17,
-       17,   17,    8,   17,    6,   17,    5,    0
+       18,   18,   26,   24,    1,   23,   24,    9,   10,   21,
+       19,   14,   20,   22,   16,   13,   18,   18,   18,   18,
+       18,   11,   12,    3,    1,    2,    0,    0,    0,   16,
+       18,   18,   18,    7,   18,   18,    4,    0,    0,   17,
+       16,   17,   18,   18,   18,   15,   15,   18,   18,   18,
+       18,   18,    8,   18,    6,   18,    5,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -858,67 +858,71 @@ YY_RULE_SETUP
 return COMA;
 	YY_BREAK
 case 15:
+/* rule 15 can match eol */
 YY_RULE_SETUP
-#line 47 "lex_spec.l"
-{yylval.ival=atoi(yytext); return INT;}
+#line 46 "lex_spec.l"
+{
+                    yylval.literal=(char*)malloc(strlen(yytext)+1);
+                    yylval.literal=strcpy(yylval.literal,yytext);
+                    return STRING;
+                   }   
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 49 "lex_spec.l"
-printf( "[FLOAT] (%s)\n", yytext);
+#line 52 "lex_spec.l"
+{yylval.ival=atoi(yytext); return INT;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 51 "lex_spec.l"
+#line 54 "lex_spec.l"
+printf( "[FLOAT] (%s)\n", yytext);
+	YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 56 "lex_spec.l"
 {if (!strcmp(yytext,"main")) 
                         return MAIN_ID;
                     else
                         {yylval.sval=addsim(yytext);return ID;}
                     }
 	YY_BREAK
-case 18:
-YY_RULE_SETUP
-#line 57 "lex_spec.l"
-return ADD;
-	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 59 "lex_spec.l"
-//printf( "[SUB]\n"); 
+#line 62 "lex_spec.l"
+return ADD;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 61 "lex_spec.l"
-//printf( "[MUL]\n"); 
+#line 64 "lex_spec.l"
+//printf( "[SUB]\n"); 
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 63 "lex_spec.l"
-//printf( "[DIV]\n"); 
+#line 66 "lex_spec.l"
+//printf( "[MUL]\n"); 
 	YY_BREAK
 case 22:
-/* rule 22 can match eol */
 YY_RULE_SETUP
-#line 65 "lex_spec.l"
-//printf("[STRING] (%s)\n",yytext);
+#line 68 "lex_spec.l"
+//printf( "[DIV]\n"); 
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 67 "lex_spec.l"
+#line 70 "lex_spec.l"
 //return END_SENT;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 69 "lex_spec.l"
+#line 72 "lex_spec.l"
 //printf( "[UNKNOW] value:%s\n", yytext );
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 72 "lex_spec.l"
+#line 75 "lex_spec.l"
 ECHO;
 	YY_BREAK
-#line 922 "lex.yy.c"
+#line 926 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1919,7 +1923,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "lex_spec.l"
+#line 75 "lex_spec.l"
 
 
 
