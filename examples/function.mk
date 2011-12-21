@@ -14,5 +14,5 @@ function main()
 {
 	a=0
 	b=1
-	c=sum(a,b,6)
+	c=suma(a,b,6)
 }

@@ -13,7 +13,7 @@ int main (int argc, char **argv){
 
   out=fopen("/tmp/salida.vm","w");
   //  out=stdout;
-  
+ 
   yyparse();
 
   //dump();

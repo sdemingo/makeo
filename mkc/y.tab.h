@@ -77,15 +77,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 47 "yacc_spec.y"
+#line 67 "yacc_spec.y"
 
-int ival;
-int sval;  //simbol index
+    int ival;
+    int sval;  //simbol index
+    int sim_v [10]; //vector de indices de simbols
 
 
 
 /* Line 1676 of yacc.c  */
-#line 89 "y.tab.h"
+#line 90 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -2,25 +2,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "sim.h"
 
 extern int yylineno;
+FILE *out;
+int sim_i;
 
- FILE *out;
+void yyerror(const char *str)
+{
+    fprintf(stderr,"line %d: %s\n",yylineno,str);
+}
 
+void encode(char *fmt,...){
 
- void yyerror(const char *str)
- {
-   fprintf(stderr,"line %d: %s\n",yylineno,str);
- }
- 
- void encode(char *fmt,...){
+    va_list ap;
+    char *p, *sval;
+    int ival;
 
-   va_list ap;
-   char *p, *sval;
-   int ival;
-
-   va_start(ap,fmt);
-   for (p = fmt; *p; p++){
+    va_start(ap,fmt);
+    for (p = fmt; *p; p++){
      if (*p !='%'){
        fputc(*p,out);
        continue;
@@ -38,15 +38,36 @@ extern int yylineno;
        fputc(*p,out);
        break;
      }
-   }
-   va_end(ap);
- }
- 
-%}
+    }
+    va_end(ap);
+}
 
+
+/* Con este metodo realizamos el linkado de los diferentes archivos */
+/* referenciados en la cabecera de nuestro programa */
+
+void link_mod(char *modfile){
+
+  FILE *fd;
+  char buf[512];
+  int n;
+
+  fd=fopen(modfile,"r");
+
+  if (fd==NULL)
+    yyerror("Module file not found");
+  
+  while((n=read(fd,buf,512))>0)
+    write(stdout,buf,n);
+  
+  close(fd);
+}
+
+%}
 %union {
-int ival;
-int sval;  //simbol index
+    int ival;
+    int sval;  //simbol index
+    int sim_v [10]; //vector de indices de simbols
 };
 
 
@@ -79,12 +100,13 @@ FUNC_MAIN_CODE: FUNC_MAIN_HDR BLOCK_START BLOCK_SENT BLOCK_END
 		/*|  error  {yyerror("Falta funcion main");exit(-1);}  */
 ;
 
-FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {encode("function main\n");} 
+FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {link_mod("module/sys.il");encode("function main\n");} 
 ;
 
 
 FUNCS : FUNC_CODE | FUNCS FUNC_CODE
 ;
+
 
 
 /* Reglas para la declaración de funciones */
@@ -95,15 +117,23 @@ FUNC_CODE : FUNC_HDR BLOCK_START BLOCK_SENT RETURN_SENT BLOCK_END
 | FUNC_HDR SENT    
 ;
 
-FUNC_HDR: FUNCTION ID PAR_A PAR_C      {encode("function %s\n",getsim($2));} 
-| FUNCTION ID PAR_A PARAM_DEF PAR_C    {encode("function %s\n",getsim($2));} 
+FUNC_HDR: FUNCTION ID PAR_A PAR_C      {encode("function %s\n",getsim($2)->name);} 
+
+| FUNCTION ID PAR_A PARAM_DEF PAR_C    
+					{
+					  encode("function %s\n",getsim($2)->name);
+					  while ((sim_i=pull_sim())>=0)
+					    {
+					      encode ("pop %s\n",getsim(sim_i)->name);
+					    }
+					 } 
 ;
 
-PARAM_DEF: ID                            {encode("pop %s\n",getsim($1)); }
-| ID COMA PARAM_DEF                      {encode("pop %s\n",getsim($1)); }
+PARAM_DEF: ID                            {push_sim($1);}
+| ID COMA PARAM_DEF                      {push_sim($1);}
 ;
 
-RETURN_SENT: RETURN ID                   {encode("return sim %s\n",getsim($2)); }
+RETURN_SENT: RETURN ID                   {encode("return sim %s\n",getsim($2)->name); }
 ;
 
 
@@ -124,12 +154,12 @@ BLOCK_SENT: BLOCK_SENT SENT
 SENT : ASIG       
 ;
 
-ASIG: ID ASIG_OP EXP          {encode("pop %s\n",getsim($1));}
+ASIG: ID ASIG_OP EXP          {encode("pop %s\n",getsim($1)->name);}
 ;
 
 EXP:   INT               {$$=$1;encode("push const %d\n",$1);}
-| ID                     {encode("push sim %s\n",getsim($1));}
-| ID ADD EXP             {encode("push sim %s\n",getsim($1)); encode("add\n"); }
+| ID                     {encode("push sim %s\n",getsim($1)->name);}
+| ID ADD EXP             {encode("push sim %s\n",getsim($1)->name); encode("add\n"); }
 | INT ADD EXP            {encode("push const %d\n",$1); encode("add\n"); }
 | FUNC_CALL              
 ;
@@ -137,16 +167,18 @@ EXP:   INT               {$$=$1;encode("push const %d\n",$1);}
 
 /* Reglas para la llamada a funciones */
 
-FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       {encode("call %s\n",getsim($1)); }
-| ID PAR_A PAR_C                      {encode("call %s\n",getsim($1)); }
+FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       {encode("call %s\n",getsim($1)->name); }
+| ID PAR_A PAR_C                      {encode("call %s\n",getsim($1)->name); }
 ;
 
 
-PARAM_CALL: ID                              {encode("push sim %s\n",getsim($1)); }
-| ID COMA PARAM_CALL                        {encode("push sim %s\n",getsim($1)); }
+PARAM_CALL: ID                              {encode("push sim %s\n",getsim($1)->name); }
+| ID COMA PARAM_CALL                        {encode("push sim %s\n",getsim($1)->name); }
 | INT                                       {encode("push const %d\n",$1); }
 | INT COMA PARAM_CALL                       {encode("push const %d\n",$1); }
 
 
 
 %% 
+
+
