@@ -4,17 +4,15 @@
     # generar el codigo intermedio que ejecutará mkm 
 
 
-function suma(x,y)
+function suma(a,b,c)
 {
-	return x+y
+	z=a+1
+	return z
 }
 
 function main()
 {
-	 a=0
-	 b =  1
-	 e='hola que tal'
-	 c=suma(a,b)
-	 c=c*2
-	 print c
+	a=0
+	b=1
+	c=sum(a,b,6)
 }

@@ -25,15 +25,15 @@ ID       [a-z0-9]*
 
 "function"         return FUNCTION;
 
-"return"           //printf( "[RET_DEF]\n");
+"return"           return RETURN;
 
 "if"               //printf("[IF]\n");
 
 "while"            //printf("[WHILE]\n");
 
-"("                //printf("[PAR_A]\n");
+"("                return PAR_A;
 
-")"                //printf("[PAR_B]\n");
+")"                return PAR_C;
 
 "{"                return BLOCK_START;
 
@@ -41,12 +41,18 @@ ID       [a-z0-9]*
 
 "="                {return ASIG_OP;}
 
+","                return COMA;
+
 
 {DIGITO}+                   {yylval.ival=atoi(yytext); return INT;}
 
 {DIGITO}+.{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 
-{ID}               {yylval.sval=addsim(yytext);return ID;}
+{ID}               {if (!strcmp(yytext,"main")) 
+                        return MAIN_ID;
+                    else
+                        {yylval.sval=addsim(yytext);return ID;}
+                    }
 
 "+"                return ADD;
 

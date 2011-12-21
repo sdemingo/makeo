@@ -45,8 +45,13 @@
      ADD = 261,
      END_SENT = 262,
      FUNCTION = 263,
-     BLOCK_START = 264,
-     BLOCK_END = 265
+     RETURN = 264,
+     MAIN_ID = 265,
+     BLOCK_START = 266,
+     BLOCK_END = 267,
+     PAR_A = 268,
+     PAR_C = 269,
+     COMA = 270
    };
 #endif
 /* Tokens.  */
@@ -56,8 +61,13 @@
 #define ADD 261
 #define END_SENT 262
 #define FUNCTION 263
-#define BLOCK_START 264
-#define BLOCK_END 265
+#define RETURN 264
+#define MAIN_ID 265
+#define BLOCK_START 266
+#define BLOCK_END 267
+#define PAR_A 268
+#define PAR_C 269
+#define COMA 270
 
 
 
@@ -75,7 +85,7 @@ int sval;  //simbol index
 
 
 /* Line 1676 of yacc.c  */
-#line 79 "y.tab.h"
+#line 89 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
