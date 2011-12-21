@@ -2,6 +2,7 @@
 function write
 pop o
 pop w_data
+
 open o
 pop fd
 push sim w_data
