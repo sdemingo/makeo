@@ -3,9 +3,9 @@
     # Codigo MK de alto nivel listo para ser compilado por mkc y
     # generar el codigo intermedio que ejecutará mkm 
 
-function resta(a,b)
+function suma2(x,z)
 {
-	f=a+1
+	f=x+2
 	return f
 }
 
@@ -17,8 +17,8 @@ function suma(a,b,c)
 
 function main()
 {
-	b=1
+	b=3
 	c=5
-	o=resta(4,b)    # Me esta fallando si pongo esta funcion. Si la quito no
+	#o=suma2(4,b)    # Me esta fallando si pongo esta funcion. Si la quito no
 	a=write('out',b)
 }

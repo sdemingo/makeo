@@ -74,8 +74,8 @@ char* u_val2text(u_val u){
   if (u.type==STRING)
     strcpy(str,u.data.sval);
   else if (u.type==INT)
-    sprintf (str,"%d",u.data.ival);
-  
+    sprintf(str,"%d",u.data.ival);
+
   return str;
 }
 

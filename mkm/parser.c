@@ -216,6 +216,4 @@ void printcom(com *c){
   
   if (c->arg2!=NULL)
     printf ("[%s]",c->arg2);
-
-  printf ("\n");
 }

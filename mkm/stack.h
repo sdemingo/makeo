@@ -7,6 +7,7 @@
 void push(u_val a);
 u_val pop();
 void pstack();
+void pstack_line();
 
 
 #endif

@@ -57,8 +57,12 @@ int main (int argc, char **argv){
     c=nextcom();
     if (c==NULL)
       break;
-    if (v_opt)
+    if (v_opt){
       printcom(c);
+      printf("\t\t");
+      pstack_line();
+      printf("\n");
+    }
     proccom(c,&mtab);
   }while (c!=NULL);
   

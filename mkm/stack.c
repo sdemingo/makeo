@@ -42,3 +42,13 @@ void pstack(){
   }
   printf ("----------------\n");
 }
+
+
+void pstack_line(){
+  int i;
+  printf ("|");
+  for (i=0;i<sp;i++){
+    printf ("%s ",u_val2text(stack[i]));
+  }
+  printf ("|");
+}
