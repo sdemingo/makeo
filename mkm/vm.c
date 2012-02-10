@@ -49,19 +49,21 @@ int main (int argc, char **argv){
 
   mtab=NULL;
 
+  initstack();
   newcontext(&mtab,"global");
   initparser(argv[1],mtab);
-  initstack();
 
   do{
     c=nextcom();
     if (c==NULL)
       break;
     if (v_opt){
-      printcom(c);
+      printf("\n");
       printf("\t\t");
       pstack_line();
       printf("\n");
+      printcom(c);
+      
     }
     proccom(c,&mtab);
   }while (c!=NULL);

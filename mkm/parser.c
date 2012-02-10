@@ -96,7 +96,6 @@ void loadlabels(int nlines,tab *t){
 
 int initparser(char *file,tab *t)
 {
-
   FILE * fp;
   char * line = NULL;
   size_t len = 0;
@@ -104,6 +103,8 @@ int initparser(char *file,tab *t)
   int i=0;
   com* c;
   sim *s;
+  u_val u;
+  char main_l[6];
   
   fp = fopen(file, "r");
   if (fp == NULL)
@@ -122,7 +123,6 @@ int initparser(char *file,tab *t)
   if (line)
     free(line);  
 
-
   loadlabels(i,t);
 
   s=getsim(t,"main");
@@ -130,7 +130,12 @@ int initparser(char *file,tab *t)
     error(NULL,"Function main not defined\n");
   if (isnull(s->val))
     error(NULL,"Function main not defined\n");
-  
+
+  //u=get_u_val(s->val.data.ival);
+  sprintf(main_l,"%d",26);
+  u=get_u_val(main_l);
+  push(u);
+
   pcounter=s->val.data.ival;
   
   return i;

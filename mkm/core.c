@@ -304,7 +304,7 @@ void proccom(com *c,tab **t){
       error(c,"bad command");
     u=pop();                     //Save the return address to can back
     if (isnull(u))
-      error(c,"empty stack");
+      error(c,"empty stack\n");
 
     newcontext(t,c->arg1);
     addsim(*t,"ret",u);
