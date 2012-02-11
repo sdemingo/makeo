@@ -56,22 +56,27 @@ void link_mod(char *mod){
   char rc;
 
   modpath=getenv("MKPATH");
-  modpath=strcat(modpath,"/module/");
-  modpath=strcat(modpath,mod);
+  if (modpath!=NULL){
+    modpath=strcat(modpath,"/module/");
+    modpath=strcat(modpath,mod);
+  }else{
+    yyerror("Environment variable MKPATH not defined");
+    return;
+  }
 
   fd=fopen(modpath,"r");
 
   if (fd==NULL)
     yyerror("Module file not found");
-
-  fputc('\n',out);
-  for (; (rc = getc(fd)) != EOF;)
-    fputc(rc,out);
-
-  fputc('\n',out);
-       
-  close(fd);
+  else{
+    fputc('\n',out);
+    for (; (rc = getc(fd)) != EOF;)
+      fputc(rc,out);
+    fputc('\n',out);
+    close(fd);
+  }
 }
+
 
 %}
 %union {

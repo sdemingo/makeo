@@ -63,6 +63,7 @@ int main (int argc, char **argv){
       pstack_line();
       printf("\n");
       printcom(c);
+printf("\n");
       
     }
     proccom(c,&mtab);

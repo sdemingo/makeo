@@ -9,7 +9,7 @@ function suma2(x,z)
 	return f
 }
 
-function suma(a,b,c)
+function suma(a,b)
 {
 	z=a+1
 	return z
