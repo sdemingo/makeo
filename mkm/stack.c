@@ -18,6 +18,7 @@ void initstack(){
 
 
 void push(u_val a){
+  //printf ("Metemos valor: %s\n",u_val2text(a));
   if (sp<MAX_SIZE)
     stack[sp++]=a;
   else

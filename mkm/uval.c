@@ -36,13 +36,15 @@ u_val get_u_val(char *arg){
   
   if (((arg[0]=='\'') && (arg[strlen(arg)-1]=='\'')) 
       ||((arg[0]=='"') && (arg[strlen(arg)-1]=='"')) ){
+
     u.type=STRING;
-    u.data.sval=(char*)malloc(strlen(arg));
+    arg[strlen(arg)-1]='\0';
+    u.data.sval=(char*)malloc(strlen(arg)-1);
     arg++;
     strcpy(u.data.sval,arg);
     escapes(&u.data.sval);
-   
-    u.data.sval[strlen(u.data.sval)-1]='\0';
+    //u.data.sval[strlen(u.data.sval)-1]='\0';
+
   }else{
     u.type=INT;
     u.data.ival=atoi(arg);
