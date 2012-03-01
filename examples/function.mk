@@ -19,6 +19,8 @@ function main()
 {
 	b=3
 	c=5
-	o=suma2(4,b)    # Me esta fallando si pongo esta funcion. Si la quito no
-	a=write('out',b)
+	msg='mensaje literal'
+	#o=suma2(4,b)
+	a=write('out',msg)
+	#a=write('out',o)
 }

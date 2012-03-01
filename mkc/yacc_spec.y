@@ -168,7 +168,7 @@ cabecera de la estructura y luego el bloque de código*/
 
 BLOCK_SENT: BLOCK_SENT SENT 
 | /* vacio */
-;
+
 
 SENT : ASIG       
 ;
@@ -180,7 +180,8 @@ EXP:   INT               {$$=$1;encode("push const %d\n",$1);}
 | ID                     {encode("push sim %s\n",getsim($1)->name);}
 | ID ADD EXP             {encode("push sim %s\n",getsim($1)->name); encode("add\n"); }
 | INT ADD EXP            {encode("push const %d\n",$1); encode("add\n"); }
-| FUNC_CALL              
+| FUNC_CALL 
+| STRING                 {encode("push const %s\n",$1); } 
 ;
 
 

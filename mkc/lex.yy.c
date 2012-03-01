@@ -508,7 +508,10 @@ char *yytext;
 
 int yylineno;
 
-#line 512 "lex.yy.c"
+
+void strtokens(char **str);
+
+#line 515 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -698,10 +701,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 16 "lex_spec.l"
+#line 19 "lex_spec.l"
 
 
-#line 705 "lex.yy.c"
+#line 708 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -787,81 +790,82 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "lex_spec.l"
+#line 21 "lex_spec.l"
 /* blank caracter - noting */
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 20 "lex_spec.l"
+#line 23 "lex_spec.l"
 /* blank line - noting */
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 22 "lex_spec.l"
+#line 25 "lex_spec.l"
 /* blank line - noting */
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "lex_spec.l"
+#line 27 "lex_spec.l"
 /* comment - noting */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 26 "lex_spec.l"
+#line 29 "lex_spec.l"
 return FUNCTION;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 28 "lex_spec.l"
+#line 31 "lex_spec.l"
 return RETURN;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 30 "lex_spec.l"
+#line 33 "lex_spec.l"
 //printf("[IF]\n");
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 32 "lex_spec.l"
+#line 35 "lex_spec.l"
 //printf("[WHILE]\n");
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 34 "lex_spec.l"
+#line 37 "lex_spec.l"
 return PAR_A;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 36 "lex_spec.l"
+#line 39 "lex_spec.l"
 return PAR_C;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 38 "lex_spec.l"
+#line 41 "lex_spec.l"
 return BLOCK_START;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 40 "lex_spec.l"
+#line 43 "lex_spec.l"
 return BLOCK_END;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 42 "lex_spec.l"
+#line 45 "lex_spec.l"
 {return ASIG_OP;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 44 "lex_spec.l"
+#line 47 "lex_spec.l"
 return COMA;
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 46 "lex_spec.l"
+#line 49 "lex_spec.l"
 {
+                    strtokens(&yytext);
                     yylval.literal=(char*)malloc(strlen(yytext)+1);
                     yylval.literal=strcpy(yylval.literal,yytext);
                     return STRING;
@@ -869,17 +873,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 52 "lex_spec.l"
+#line 56 "lex_spec.l"
 {yylval.ival=atoi(yytext); return INT;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 54 "lex_spec.l"
+#line 58 "lex_spec.l"
 printf( "[FLOAT] (%s)\n", yytext);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 56 "lex_spec.l"
+#line 60 "lex_spec.l"
 {if (!strcmp(yytext,"main")) 
                         return MAIN_ID;
                     else
@@ -888,41 +892,41 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 62 "lex_spec.l"
+#line 66 "lex_spec.l"
 return ADD;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 64 "lex_spec.l"
+#line 68 "lex_spec.l"
 //printf( "[SUB]\n"); 
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 66 "lex_spec.l"
+#line 70 "lex_spec.l"
 //printf( "[MUL]\n"); 
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 68 "lex_spec.l"
+#line 72 "lex_spec.l"
 //printf( "[DIV]\n"); 
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 70 "lex_spec.l"
+#line 74 "lex_spec.l"
 //return END_SENT;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 72 "lex_spec.l"
+#line 76 "lex_spec.l"
 //printf( "[UNKNOW] value:%s\n", yytext );
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 75 "lex_spec.l"
+#line 79 "lex_spec.l"
 ECHO;
 	YY_BREAK
-#line 926 "lex.yy.c"
+#line 930 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1923,13 +1927,25 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 75 "lex_spec.l"
+#line 79 "lex_spec.l"
 
 
 
 int yywrap()
 {
    return(1);
+}
+
+
+void strtokens(char **str)
+{
+  char *s;
+  s=*str;
+  while(*s){
+    if (*s=='\'')
+      *s='"';
+    *s++;
+  }
 }
 
 

@@ -6,6 +6,9 @@
 
 int yylineno;
 
+
+void strtokens(char **str);
+
 %}
 
 BLANK    [\t ]
@@ -44,6 +47,7 @@ ID       [a-z0-9]*
 ","                return COMA;
 
 "'".+[^']"'"     {
+                    strtokens(&yytext);
                     yylval.literal=(char*)malloc(strlen(yytext)+1);
                     yylval.literal=strcpy(yylval.literal,yytext);
                     return STRING;
@@ -77,6 +81,18 @@ ID       [a-z0-9]*
 int yywrap()
 {
    return(1);
+}
+
+
+void strtokens(char **str)
+{
+  char *s;
+  s=*str;
+  while(*s){
+    if (*s=='\'')
+      *s='"';
+    *s++;
+  }
 }
 
 
