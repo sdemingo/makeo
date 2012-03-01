@@ -2,16 +2,15 @@
 	WHAT IS MAKEO
 
 It's a really simple stack-based virtual machine and a intermediate
-languaje interpreter named MK. You can see the reference of this
-simple language in the wiki of the project. It has not a particular
-target. I have made it, just for fun.
+language interpreter named IL. Now, I'm preparing a reference of this
+intermediate language and working on a compiler to get IL code from a
+high-level language called MK. 
 
-In the future I hope to complete the project with a compiler. The idea
-is to generate this MK code from a high-level language. This work will
-be harder. I expect to have enough energy to work on it.
-
-If you want to help me and learn some things about compilers and
-traductors, of course, you are invited ;-)
+This work was inspired by reading "The Elements of Computing Systems:
+Building a Modern Computer from First Principles" and It has not a
+particular target and I have made it, just for fun. If you want to
+help me and learn some things about compilers, of course, you are
+invited ;-)
 
 	
 	INSTALL
