@@ -13,6 +13,18 @@ be harder. I expect to have enough energy to work on it.
 If you want to help me and learn some things about compilers and
 traductors, of course, you are invited ;-)
 
+	
+	INSTALL
+
+To install Makeo properly you only need to use the followings
+commands:
+
+hg clone https://bitbucket.org/sdemingo/makeo
+cd makeo
+make
+make clean
+MKPATH=`pwd`
+export MKPATH
 
 
 	EXECUTING MK PROGRAMS
