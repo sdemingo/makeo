@@ -11,7 +11,7 @@ int sim_i;
 
 void yyerror(const char *str)
 {
-    fprintf(stderr,"line %d: %s\n",yylineno-1,str);
+    fprintf(stderr,"line %d: %s\n",yylineno,str);
 }
 
 void encode(char *fmt,...){
@@ -183,7 +183,7 @@ FUNCS : FUNC_CODE | FUNCS FUNC_CODE
 /* Reglas para la declaración de funciones */
 
 FUNC_CODE : FUNC_HDR BLOCK_START BLOCK_SENT RETURN_SENT BLOCK_END 
-|  FUNC_HDR BLOCK_START BLOCK_SENT BLOCK_END 
+| FUNC_HDR BLOCK_START BLOCK_SENT BLOCK_END 
 | FUNC_HDR SENT RETURN_SENT
 | FUNC_HDR SENT    
 ;
@@ -209,6 +209,7 @@ PARAM_DEF: ID                            {$$=1;push_sim($1);}
 ;
 
 RETURN_SENT: RETURN ID                   {encode("return sim %s\n",getsim($2)->name); }
+| RETURN                                 {encode("return const 0\n");}
 ;
 
 
@@ -223,7 +224,8 @@ BLOCK_SENT: BLOCK_SENT SENT
 | /* vacio */
 
 
-SENT : ASIG       
+SENT : ASIG 
+| FUNC_CALL 
 ;
 
 ASIG: ID ASIG_OP EXP          {getsim($1)->stype=$3;encode("pop %s\n",getsim($1)->name);}
