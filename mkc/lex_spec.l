@@ -4,12 +4,11 @@
 #include <math.h>
 #include "y.tab.h"
 
-int yylineno;
-
-
 void strtokens(char **str);
 
 %}
+
+%option yylineno
 
 BLANK    [\t ]
 DIGITO   [0-9]

@@ -11,7 +11,7 @@ int sim_i;
 
 void yyerror(const char *str)
 {
-    fprintf(stderr,"line %d: %s\n",yylineno,str);
+    fprintf(stderr,"line %d: %s\n",yylineno-1,str);
 }
 
 void encode(char *fmt,...){
@@ -56,7 +56,7 @@ char* path(char *mod){
     return modpath;
   }else{
     yyerror("Environment variable MKPATH not defined");
-    return;
+    return NULL;
   }
 }
 
@@ -75,7 +75,6 @@ void link_mod(char *mod){
   fd=fopen(path(mod),"r");
 
   if (fd==NULL){
-    printf ("**modulo %s no encontrado\n",modpath);
     yyerror("Module file not found");
   }else{
     fputc('\n',out);
@@ -101,7 +100,6 @@ void load_hdr_mod(char *mod){
   fd=fopen(path(mod),"r");
 
   if (fd==NULL){
-    printf ("modulo %s no encontrado\n",mod);
     yyerror("Module file not found");
   }else{
     while (fgets(lin, 512, fd) != NULL){
@@ -216,9 +214,6 @@ RETURN_SENT: RETURN ID                   {encode("return sim %s\n",getsim($2)->n
 
 
 
-
-
-
 /* Para estructuras como while, ifs, fors, etc usaremos producciones
 similares a las que hemos usado con las funciones, separando la
 cabecera de la estructura y luego el bloque de código*/
@@ -231,15 +226,33 @@ BLOCK_SENT: BLOCK_SENT SENT
 SENT : ASIG       
 ;
 
-ASIG: ID ASIG_OP EXP          {encode("pop %s\n",getsim($1)->name);}
+ASIG: ID ASIG_OP EXP          {getsim($1)->stype=$3;encode("pop %s\n",getsim($1)->name);}
 ;
 
-EXP:   INT               {$$=$1;encode("push const %d\n",$1);}
-| ID                     {encode("push sim %s\n",getsim($1)->name);}
-| ID ADD EXP             {encode("push sim %s\n",getsim($1)->name); encode("add\n"); }
-| INT ADD EXP            {encode("push const %d\n",$1); encode("add\n"); }
+EXP:   INT               { 
+                          $$=S_INT;
+                          getsim($1)->stype=S_INT;
+			  encode("push const %d\n",$1);
+                         }
+| ID                     {
+                          $$=getsim($1)->stype;
+                          encode("push sim %s\n",getsim($1)->name);
+                         }
+| ID ADD EXP             {
+                          if (getsim($1)->stype!=$3)
+			    yyerror("Type error");
+			  else
+			    encode("push sim %s\n",getsim($1)->name); encode("add\n"); 
+                         }
+| INT ADD EXP            {
+                           encode("push const %d\n",$1); encode("add\n"); 
+                         }
 | FUNC_CALL 
-| STRING                 {encode("push const %s\n",$1); } 
+
+| STRING                 {
+                          $$=S_STRING;
+			  encode("push const %s\n",$1); 
+                         } 
 ;
 
 

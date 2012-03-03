@@ -22,7 +22,7 @@ function main()
 	b=3
 	c=5
 	msg='mensaje literal'
-	o=suma(4,b,6)
+	o=suma(4,b)
 	a=write('out',msg)
 	#a=write('out',o)
 }

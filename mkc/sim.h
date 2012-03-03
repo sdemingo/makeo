@@ -1,9 +1,15 @@
 
+enum Stype {S_INT,
+	    S_FLOAT,
+	    S_STRING};
+
+
 struct Sim{
   char *name;
   int stype;  
   int ival;
 };
+
 
 typedef struct Sim Sim;
 

@@ -81,7 +81,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 127 "yacc_spec.y"
+#line 125 "yacc_spec.y"
 
   int ival;
   int sval;  //simbol index
