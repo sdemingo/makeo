@@ -27,8 +27,8 @@ Sim *nullsim;
 void init_sim(){
   
   nullsim=(Sim*)malloc(sizeof(Sim));
-  nullsim->name="unknow sim";
-  
+  nullsim->name=(char*)malloc(sizeof(char)*50);
+  strcpy(nullsim->name,"unknow sim");  
   memset(simstack,-1,MAX_SIM);
 }
 
@@ -52,15 +52,6 @@ int addsim(char *sim){
   }
   return -1;
   //error
-}
-
-
-char *getsim_name(int id)
-{
-  if ((id<0) || (id>=MAX_SIM))
-    return "";
-  
-  return simtab[id].name;
 }
 
 Sim *getsim(int id)

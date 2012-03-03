@@ -1,21 +1,22 @@
 
 struct Sim{
   char *name;
+  int stype;  
+  int ival;
 };
 
 typedef struct Sim Sim;
 
-int addsim(char *sim);
+ /* Simbols table */
 
-char *getsim_name(int id);
+int addsim(char *sim);
 
 Sim *getsim(int id);
 
 void dump();
 
-
-
-
+ 
+/* Simbols queue */
 
 void push_sim(int id);
 

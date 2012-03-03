@@ -13,7 +13,7 @@ void strtokens(char **str);
 
 BLANK    [\t ]
 DIGITO   [0-9]
-ID       [a-z0-9]*
+ID       [a-z0-9.]*
 
 
 %%
@@ -25,6 +25,8 @@ ID       [a-z0-9]*
 ^\n                /* blank line - noting */
 
 {BLANK}+"#".+      /* comment - noting */
+
+"import"           return IMPORT;
 
 "function"         return FUNCTION;
 

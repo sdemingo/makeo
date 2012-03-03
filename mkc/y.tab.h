@@ -45,14 +45,15 @@
      ADD = 261,
      END_SENT = 262,
      STRING = 263,
-     FUNCTION = 264,
-     RETURN = 265,
-     MAIN_ID = 266,
-     BLOCK_START = 267,
-     BLOCK_END = 268,
-     PAR_A = 269,
-     PAR_C = 270,
-     COMA = 271
+     IMPORT = 264,
+     FUNCTION = 265,
+     RETURN = 266,
+     MAIN_ID = 267,
+     BLOCK_START = 268,
+     BLOCK_END = 269,
+     PAR_A = 270,
+     PAR_C = 271,
+     COMA = 272
    };
 #endif
 /* Tokens.  */
@@ -62,14 +63,15 @@
 #define ADD 261
 #define END_SENT 262
 #define STRING 263
-#define FUNCTION 264
-#define RETURN 265
-#define MAIN_ID 266
-#define BLOCK_START 267
-#define BLOCK_END 268
-#define PAR_A 269
-#define PAR_C 270
-#define COMA 271
+#define IMPORT 264
+#define FUNCTION 265
+#define RETURN 266
+#define MAIN_ID 267
+#define BLOCK_START 268
+#define BLOCK_END 269
+#define PAR_A 270
+#define PAR_C 271
+#define COMA 272
 
 
 
@@ -79,7 +81,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 82 "yacc_spec.y"
+#line 127 "yacc_spec.y"
 
   int ival;
   int sval;  //simbol index
@@ -89,7 +91,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 93 "y.tab.h"
+#line 95 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
