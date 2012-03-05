@@ -11,7 +11,7 @@ int main (int argc, char **argv){
   else
     yyin = stdin;
 
-  out=fopen("/tmp/salida.vm","w");
+  out=fopen("/tmp/salida.il","w");
   //  out=stdout;
  
   yyparse();

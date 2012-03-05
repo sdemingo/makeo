@@ -182,14 +182,11 @@ FUNCS : FUNC_CODE | FUNCS FUNC_CODE
 
 /* Reglas para la declaración de funciones */
 
-FUNC_CODE : FUNC_HDR BLOCK_START BLOCK_SENT RETURN_SENT BLOCK_END 
-| FUNC_HDR BLOCK_START BLOCK_SENT BLOCK_END 
-| FUNC_HDR SENT RETURN_SENT
-| FUNC_HDR SENT    
+FUNC_CODE : FUNC_HDR BLOCK_START BLOCK_SENT RETURN_SENT 
 ;
 
 FUNC_HDR: FUNCTION ID PAR_A PAR_C      {
-                                         //generar #header
+                                         //generar #header si es necesario
                                          encode("function %s\n",getsim($2)->name);
                                        } 
 
@@ -208,8 +205,9 @@ PARAM_DEF: ID                            {$$=1;push_sim($1);}
 | ID COMA PARAM_DEF                      {$$=1+$3;push_sim($1);}
 ;
 
-RETURN_SENT: RETURN ID                   {encode("return sim %s\n",getsim($2)->name); }
-| RETURN                                 {encode("return const 0\n");}
+RETURN_SENT: RETURN ID BLOCK_END         {encode("return sim %s\n",getsim($2)->name); }
+| RETURN BLOCK_END                       {yyerror("Return without a value or simbol");}
+| BLOCK_END                              {encode("return const 0\n");}
 ;
 
 
@@ -224,11 +222,15 @@ BLOCK_SENT: BLOCK_SENT SENT
 | /* vacio */
 
 
+
 SENT : ASIG 
 | FUNC_CALL 
 ;
 
-ASIG: ID ASIG_OP EXP          {getsim($1)->stype=$3;encode("pop %s\n",getsim($1)->name);}
+ASIG: ID ASIG_OP EXP          {
+                               getsim($1)->stype=$3;
+                               encode("pop %s\n",getsim($1)->name);
+                              }
 ;
 
 EXP:   INT               { 
@@ -240,21 +242,28 @@ EXP:   INT               {
                           $$=getsim($1)->stype;
                           encode("push sim %s\n",getsim($1)->name);
                          }
-| ID ADD EXP             {
-                          if (getsim($1)->stype!=$3)
-			    yyerror("Type error");
-			  else
-			    encode("push sim %s\n",getsim($1)->name); encode("add\n"); 
-                         }
-| INT ADD EXP            {
-                           encode("push const %d\n",$1); encode("add\n"); 
-                         }
 | FUNC_CALL 
 
 | STRING                 {
                           $$=S_STRING;
 			  encode("push const %s\n",$1); 
                          } 
+
+
+| EXP ADD ID             {
+                          if (getsim($3)->stype!=$1)
+			    yyerror("Type error");  //muestra yylineno++
+			  else
+			    encode("push sim %s\n",getsim($3)->name); encode("add\n"); 
+                         }
+
+
+| EXP ADD INT            {
+                           if ($1!=S_INT)
+			    yyerror("Type error");    //muestra yylineno++
+			   else
+                            encode("push const %d\n",$3); encode("add\n"); 
+                         }
 ;
 
 

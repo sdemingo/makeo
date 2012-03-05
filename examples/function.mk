@@ -14,7 +14,7 @@ function suma2(x,z)
 function suma(a,b)
 {
 	z=a+1
-	return
+	return z
 }
 
 function main()
@@ -22,7 +22,9 @@ function main()
 	b=3
 	c=5
 	msg='mensaje literal'
+	msg2=' hola'
+	z=msg+msg2
 	suma(4,b)
-	a=write('out',msg)
-	#a=write('out',o)
+	a=write('out',z)
+	 #a=write('out',o)
 }
