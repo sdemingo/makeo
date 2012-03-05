@@ -5,10 +5,9 @@
 
 import sys.il
 
-function suma2(x,z)
+function mensaje(a)
 {
-	f=x+2
-	return f
+	return a
 }
 
 function suma(a,b)
@@ -22,8 +21,7 @@ function main()
 	b=3
 	c=5
 	msg='mensaje literal'
-	msg2=' hola'
-	z=msg+msg2
+	z=b+4+c
 	suma(4,b)
 	a=write('out',z)
 	 #a=write('out',o)

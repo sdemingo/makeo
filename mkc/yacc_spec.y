@@ -205,7 +205,7 @@ PARAM_DEF: ID                            {$$=1;push_sim($1);}
 | ID COMA PARAM_DEF                      {$$=1+$3;push_sim($1);}
 ;
 
-RETURN_SENT: RETURN ID BLOCK_END         {encode("return sim %s\n",getsim($2)->name); }
+RETURN_SENT: RETURN EXP BLOCK_END         {encode("return sim %s\n",getsim($2)->name); }
 | RETURN BLOCK_END                       {yyerror("Return without a value or simbol");}
 | BLOCK_END                              {encode("return const 0\n");}
 ;
@@ -252,7 +252,7 @@ EXP:   INT               {
 
 | EXP ADD ID             {
                           if (getsim($3)->stype!=$1)
-			    yyerror("Type error");  //muestra yylineno++
+			    yyerror("Type error");  
 			  else
 			    encode("push sim %s\n",getsim($3)->name); encode("add\n"); 
                          }
@@ -260,10 +260,24 @@ EXP:   INT               {
 
 | EXP ADD INT            {
                            if ($1!=S_INT)
-			    yyerror("Type error");    //muestra yylineno++
+			    yyerror("Type error");    
 			   else
                             encode("push const %d\n",$3); encode("add\n"); 
                          }
+
+| EXP ADD STRING         {
+                           if ($1!=S_STRING)
+			    yyerror("Type error");    
+			   else
+                            encode("push const %s\n",$3); encode("add\n"); 
+                         }
+
+/*
+| EXP ADD EXP           { 
+                           if ($1!=$3)
+			    yyerror("Type error");    
+                        }
+*/
 ;
 
 
