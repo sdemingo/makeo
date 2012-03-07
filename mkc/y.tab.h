@@ -81,12 +81,12 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 125 "yacc_spec.y"
+#line 19 "yacc_spec.y"
 
   int ival;
-  int sval;  //simbol index
-  int sim_v [10]; //vector de indices de simbols
+  int sval;       //simbol index
   char *literal;
+  char buf_code[64];       // buffer para subir código a través del árbol de no-terminales
 
 
 

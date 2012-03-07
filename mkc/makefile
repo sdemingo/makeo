@@ -1,5 +1,5 @@
 
-OBJS = mkc.o sim.o lex.yy.o y.tab.o
+OBJS = mkc.o sim.o code.o lex.yy.o y.tab.o
 
 HDR = sim.h y.tab.h
 

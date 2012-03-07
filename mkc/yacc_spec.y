@@ -1,12 +1,12 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdarg.h>
 #include <string.h>
 #include "sim.h"
+#include "code.h"
+
 
 extern int yylineno;
-FILE *out;
 int sim_i;
 
 void yyerror(const char *str)
@@ -14,119 +14,13 @@ void yyerror(const char *str)
     fprintf(stderr,"line %d: %s\n",yylineno,str);
 }
 
-void encode(char *fmt,...){
-
-    va_list ap;
-    char *p, *sval;
-    int ival;
-
-    va_start(ap,fmt);
-    for (p = fmt; *p; p++){
-     if (*p !='%'){
-       fputc(*p,out);
-       continue;
-     }
-     switch (*++p){
-     case 'd':
-       ival=va_arg(ap,int);
-       fprintf(out,"%d",ival);
-       break;
-     case 's':
-       for (sval=va_arg(ap,char*);*sval;sval++)
-	 fputc(*sval,out);
-       break;
-     default:
-       fputc(*p,out);
-       break;
-     }
-    }
-    va_end(ap);
-}
-
-
-char* path(char *mod){
-
-  char *modpath;
-
-  modpath=(char*)malloc(sizeof(char)*512);
-  strcpy(modpath,getenv("MKPATH"));
-  if (modpath!=NULL){
-    modpath=strcat(modpath,"/module/");
-    modpath=strcat(modpath,mod);
-    return modpath;
-  }else{
-    yyerror("Environment variable MKPATH not defined");
-    return NULL;
-  }
-}
-
-
-/* Con este metodo realizamos el linkado de los diferentes archivos */
-/* referenciados en la cabecera de nuestro programa */
-
-void link_mod(char *mod){
-
-  FILE *fd;
-  char buf[512];
-  char *modpath;
-  int n;
-  char rc;
-
-  fd=fopen(path(mod),"r");
-
-  if (fd==NULL){
-    yyerror("Module file not found");
-  }else{
-    fputc('\n',out);
-    for (; (rc = getc(fd)) != EOF;)
-      fputc(rc,out);
-    fputc('\n',out);
-    close(fd);
-  }
-}
-
-
-
-void load_hdr_mod(char *mod){
-
-  FILE *fd;
-  char buf[512];
-  int n;
-  char rc;
-  char lin[512];
-  char *token;
-  int n_token=0,in;
-
-  fd=fopen(path(mod),"r");
-
-  if (fd==NULL){
-    yyerror("Module file not found");
-  }else{
-    while (fgets(lin, 512, fd) != NULL){
-      if (strstr(lin,"#header")){
-	token = strtok(lin, " ");
-	while (token) {
-	  n_token++;
-	  if (n_token==2)
-	    in=addsim(token);
-	  if (n_token==3)
-	    getsim(in)->ival=atoi(token);
-	  token = strtok(NULL, " ");
-	}
-      }
-    }
-    close(fd);
-  }
-}
-
-
 
 %}
 %union {
   int ival;
-  int sval;  //simbol index
-  int sim_v [10]; //vector de indices de simbols
+  int sval;       //simbol index
   char *literal;
+  char buf_code[64];       // buffer para subir código a través del árbol de no-terminales
 };
 
 
@@ -153,6 +47,8 @@ void load_hdr_mod(char *mod){
 %type <ival> PARAM_DEF
 %type <ival> PARAM_CALL
 
+%type <buf_code> EXP2
+
 %%
 
 PROGRAM : IMPORTS FUNC_MAIN_CODE  |  IMPORTS FUNCS FUNC_MAIN_CODE   
@@ -161,7 +57,7 @@ PROGRAM : IMPORTS FUNC_MAIN_CODE  |  IMPORTS FUNCS FUNC_MAIN_CODE
 IMPORTS: IMPORTS IMPORT_DEF | ;
 
 
-IMPORT_DEF: IMPORT ID                     {load_hdr_mod(getsim($2)->name);}
+IMPORT_DEF: IMPORT ID                     {load_mod(getsim($2)->name);}
 ;
 
 
@@ -227,12 +123,78 @@ SENT : ASIG
 | FUNC_CALL 
 ;
 
+
+
+
 ASIG: ID ASIG_OP EXP          {
                                getsim($1)->stype=$3;
                                encode("pop %s\n",getsim($1)->name);
                               }
 ;
 
+
+EXP: ID EXP2             
+{
+  $$=getsim($1)->stype;
+  encode("push sim %s\n",getsim($1)->name);
+  encode($2);                //codigo que que sube por EXP2
+}
+
+| INT EXP2
+{
+  $$=S_INT;
+  encode("push const %d\n",$1);
+  encode($2);                //codigo que que sube por EXP2
+}
+
+
+| STRING EXP2
+{
+  $$=S_STRING;
+  encode("push const %s\n",$1);
+  encode($2);                //codigo que que sube por EXP2
+}
+
+
+| ID    
+{
+  $$=getsim($1)->stype;
+  encode("push sim %s\n",getsim($1)->name);
+}
+
+| INT
+{ 
+  $$=S_INT;
+  getsim($1)->stype=S_INT;
+  encode("push const %d\n",$1);
+}
+
+
+| STRING
+{
+  $$=S_STRING;
+  encode("push const %s\n",$1); 
+} 
+
+| FUNC_CALL              
+{
+  $$=S_INT;
+}
+;
+
+
+
+EXP2: ADD EXP           
+{
+  strcpy($$,"add\n");  //subimos código por EXP2 hacia EXP para codificarlo alli
+}
+;
+
+
+
+
+
+/*
 EXP:   INT               { 
                           $$=S_INT;
                           getsim($1)->stype=S_INT;
@@ -242,7 +204,8 @@ EXP:   INT               {
                           $$=getsim($1)->stype;
                           encode("push sim %s\n",getsim($1)->name);
                          }
-| FUNC_CALL 
+
+| FUNC_CALL              {$$=S_INT;}
 
 | STRING                 {
                           $$=S_STRING;
@@ -271,12 +234,6 @@ EXP:   INT               {
 			   else
                             encode("push const %s\n",$3); encode("add\n"); 
                          }
-
-/*
-| EXP ADD EXP           { 
-                           if ($1!=$3)
-			    yyerror("Type error");    
-                        }
 */
 ;
 
@@ -303,5 +260,4 @@ PARAM_CALL: ID                              {$$=1; encode("push sim %s\n",getsim
 
 
 %% 
-
 

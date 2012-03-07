@@ -12,17 +12,17 @@ function mensaje(a)
 
 function suma(a,b)
 {
-	z=a+1
+	z=a+a
 	return z
 }
 
 function main()
 {
+	a=1
 	b=3
 	c=5
-	msg='mensaje literal'
-	z=b+4+c
-	suma(4,b)
+	#msg='mensaje literal'
+	z=a+1+c
 	a=write('out',z)
 	 #a=write('out',o)
 }
