@@ -183,60 +183,12 @@ EXP: ID EXP2
 ;
 
 
-
 EXP2: ADD EXP           
 {
-  pullcode("add\n");     //apilo código para descargarlo en EXP
-  printf ("subo add\n");
+  pushcode("add\n");     //apilo código para descargarlo en EXP
 }
 ;
 
-
-
-
-
-/*
-EXP:   INT               { 
-                          $$=S_INT;
-                          getsim($1)->stype=S_INT;
-			  encode("push const %d\n",$1);
-                         }
-| ID                     {
-                          $$=getsim($1)->stype;
-                          encode("push sim %s\n",getsim($1)->name);
-                         }
-
-| FUNC_CALL              {$$=S_INT;}
-
-| STRING                 {
-                          $$=S_STRING;
-			  encode("push const %s\n",$1); 
-                         } 
-
-
-| EXP ADD ID             {
-                          if (getsim($3)->stype!=$1)
-			    yyerror("Type error");  
-			  else
-			    encode("push sim %s\n",getsim($3)->name); encode("add\n"); 
-                         }
-
-
-| EXP ADD INT            {
-                           if ($1!=S_INT)
-			    yyerror("Type error");    
-			   else
-                            encode("push const %d\n",$3); encode("add\n"); 
-                         }
-
-| EXP ADD STRING         {
-                           if ($1!=S_STRING)
-			    yyerror("Type error");    
-			   else
-                            encode("push const %s\n",$3); encode("add\n"); 
-                         }
-*/
-;
 
 
 /* Reglas para la llamada a funciones */

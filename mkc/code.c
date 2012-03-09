@@ -31,7 +31,7 @@ void encode(const char* fmt, ...)
 
 
 
-void pullcode(const char* fmt, ...)
+void pushcode(const char* fmt, ...)
 {
   va_list args;
   char line[100];
@@ -42,6 +42,7 @@ void pullcode(const char* fmt, ...)
 
   if (codebuf==NULL){
     codebuf=(char*)malloc(codebuf_sz);
+    strcpy(codebuf,""); 
   }
 
   if ((codebuf_sz-strlen(codebuf))<strlen(line)){
