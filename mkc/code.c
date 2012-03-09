@@ -7,77 +7,67 @@
 #include "sim.h"
 
 
-char *realloc_str(char *str){
-  
-  char *aux;
-  aux=(char*)malloc(strlen(str)*2);
-  strcpy(aux,str);
-  str=aux;
 
-  return str;
+char *codebuf;
+int codebuf_sz = 400;
+
+
+void encode(const char* fmt, ...)
+{
+  va_list args;
+  char buffer[100];
+ 
+  va_start(args,fmt);
+  vsprintf (buffer, fmt, args);
+  /*
+    Usar vsnprintf para controlar los limites 
+    y el valor de retorno para saber si se ha truncado
+    el fmt al meterlo en el buffer
+   */
+   
+  fprintf(out,"%s",buffer);
+  va_end(args);
 }
 
 
-void proc_fmt(char **out, char *fmt,...){
 
-  va_list ap;
-  char *p, *sval;
-  int ival;
-  int off=0;
+void pullcode(const char* fmt, ...)
+{
+  va_list args;
+  char line[100];
 
-  va_start(ap,fmt);
-  for (p = fmt; *p; p++){
-    if (*p !='%'){
-      //fputc(*p,out);
-      sprintf(*out,"%c",*p);
-      continue;
-    }
-    switch (*++p){
-    case 'd':
-      ival=va_arg(ap,int);
-      //fprintf(out,"%d",ival);
-      sprintf(*out,"%c",*p);
-      break;
-    case 's':
-      //for (sval=va_arg(ap,char*);*sval;sval++)
-      //fputc(*sval,out);
-      sprintf(*out,"%s",sval);
-      break;
-    default:
-      //fputc(*p,out);
-      sprintf(*out,"%c",*p);
-      break;
-    }
+  va_start(args,fmt);
+  vsprintf (line, fmt, args);
+  va_end(args);
+
+  if (codebuf==NULL){
+    codebuf=(char*)malloc(codebuf_sz);
   }
-  va_end(ap);
 
-  //  return out;
+  if ((codebuf_sz-strlen(codebuf))<strlen(line)){
+    printf ("Sin sitio en el codebuf\n");
+    return;
+  }
+  
+  /*
+    Append line on the front of codebuf
+  */
+  char *aux=(char*)malloc(codebuf_sz);
+  strcpy(aux,line);
+  strcat(aux,codebuf);
+  strcpy(codebuf,aux);
+  free(aux);
 }
 
 
 
-void encode(char *fmt,...){
-
-  char *s,*aux;
-  s=(char*)malloc(sizeof(char)*500);
-
-  aux=s;
-  proc_fmt(&s,fmt);
-  fputs(aux,out);  
+void dumpcode(){
+  if (codebuf==NULL)
+    return;
+  fprintf(out,"%s",codebuf);
+  free(codebuf);
+  codebuf=NULL;
 }
-
-
-void push_code(char *fmt,...){
-
-}
-
-
-char *dump_code(){
-
-}
-
-
-
 
 
 

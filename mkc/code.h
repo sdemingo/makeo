@@ -1,10 +1,9 @@
 
 FILE *out;
 
-void encode(char *fmt,...);
-
-void push_code(char *fmt,...);
-char *dump_code();
+void encode(const char *fmt,...);
+void pushcode(const char *fmt,...);
+void dumpcode();
 
 void load_mod(char *mod);
 void link_mod(char *mod);

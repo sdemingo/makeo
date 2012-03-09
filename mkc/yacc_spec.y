@@ -137,14 +137,14 @@ EXP: ID EXP2
 {
   $$=getsim($1)->stype;
   encode("push sim %s\n",getsim($1)->name);
-  encode($2);                //codigo que que sube por EXP2
+  dumpcode();               //codigo apilado desde EXP2
 }
 
 | INT EXP2
 {
   $$=S_INT;
   encode("push const %d\n",$1);
-  encode($2);                //codigo que que sube por EXP2
+  dumpcode();               //codigo apilado desde EXP2
 }
 
 
@@ -152,7 +152,7 @@ EXP: ID EXP2
 {
   $$=S_STRING;
   encode("push const %s\n",$1);
-  encode($2);                //codigo que que sube por EXP2
+  dumpcode();               //codigo apilado desde EXP2
 }
 
 
@@ -186,7 +186,8 @@ EXP: ID EXP2
 
 EXP2: ADD EXP           
 {
-  strcpy($$,"add\n");  //subimos código por EXP2 hacia EXP para codificarlo alli
+  pullcode("add\n");     //apilo código para descargarlo en EXP
+  printf ("subo add\n");
 }
 ;
 
