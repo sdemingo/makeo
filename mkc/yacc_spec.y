@@ -4,18 +4,26 @@
 #include <string.h>
 #include "sim.h"
 #include "code.h"
-
-
-extern int yylineno;
-int sim_i;
-
-void yyerror(const char *str)
-{
+  
+  
+  extern int yylineno;
+  int sim_i;
+  
+  void yyerror(const char *str)
+  {
     fprintf(stderr,"line %d: %s\n",yylineno,str);
-}
+  }
+  
+  
+  void built_in(){
+    load_il("sys.il");
+    link_il("sys.il");
+  }
+  
+  
+  %}
 
 
-%}
 %union {
   int ival;
   int sval;       //simbol index
@@ -57,7 +65,7 @@ PROGRAM : IMPORTS FUNC_MAIN_CODE  |  IMPORTS FUNCS FUNC_MAIN_CODE
 IMPORTS: IMPORTS IMPORT_DEF | ;
 
 
-IMPORT_DEF: IMPORT ID                     {load_mod(getsim($2)->name);}
+IMPORT_DEF: IMPORT ID                     {encode("import\n");}
 ;
 
 
@@ -67,7 +75,7 @@ FUNC_MAIN_CODE: FUNC_MAIN_HDR BLOCK_START BLOCK_SENT BLOCK_END
 ;
 
 
-FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {link_mod("sys.il");encode("function main\n");} 
+FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {built_in();encode("function main\n");} 
 ;
 
 

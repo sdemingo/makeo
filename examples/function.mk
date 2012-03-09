@@ -3,7 +3,6 @@
     # Codigo MK de alto nivel listo para ser compilado por mkc y
     # generar el codigo intermedio que ejecutará mkm 
 
-import sys.il
 
 function mensaje(a)
 {

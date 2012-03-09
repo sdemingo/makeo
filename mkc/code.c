@@ -79,7 +79,7 @@ char* path(char *mod){
   modpath=(char*)malloc(sizeof(char)*512);
   strcpy(modpath,getenv("MKPATH"));
   if (modpath!=NULL){
-    modpath=strcat(modpath,"/module/");
+    modpath=strcat(modpath,"/mkc/il/");
     modpath=strcat(modpath,mod);
     return modpath;
   }else{
@@ -92,7 +92,7 @@ char* path(char *mod){
 /* Con este metodo realizamos el linkado de los diferentes archivos */
 /* referenciados en la cabecera de nuestro programa */
 
-void link_mod(char *mod){
+void link_il(char *mod){
 
   FILE *fd;
   char buf[512];
@@ -114,7 +114,7 @@ void link_mod(char *mod){
 }
 
 
-void load_mod(char *mod){
+void load_il(char *mod){
 
   FILE *fd;
   char buf[512];
