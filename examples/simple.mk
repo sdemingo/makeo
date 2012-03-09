@@ -5,9 +5,9 @@
 
 function main()
 {
-a=5
-b=3
-c=a+b+b
-d=b+7
+a=3
+b=3+a
+m1='hola que tal'
+write('out',m1)
 }
 

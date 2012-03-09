@@ -134,10 +134,11 @@ SENT : ASIG
 
 
 
-ASIG: ID ASIG_OP EXP          {
-                               getsim($1)->stype=$3;
-                               encode("pop %s\n",getsim($1)->name);
-                              }
+ASIG: ID ASIG_OP EXP          
+{
+  getsim($1)->stype=$3;
+  encode("pop %s\n",getsim($1)->name);
+}
 ;
 
 

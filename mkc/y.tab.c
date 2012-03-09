@@ -75,24 +75,24 @@
 #include <string.h>
 #include "sim.h"
 #include "code.h"
-
-
-extern int yylineno;
-int sim_i;
-
- void yyerror(const char *str)
- {
-   fprintf(stderr,"line %d: %s\n",yylineno,str);
- }
- 
- 
- void built_in(){
-   load_il("sys.il");
-   link_il("sys.il");
- }
-
-
-
+  
+  
+  extern int yylineno;
+  int sim_i;
+  
+  void yyerror(const char *str)
+  {
+    fprintf(stderr,"line %d: %s\n",yylineno,str);
+  }
+  
+  
+  void built_in(){
+    load_il("sys.il");
+    link_il("sys.il");
+  }
+  
+  
+  
 
 /* Line 189 of yacc.c  */
 #line 99 "y.tab.c"
@@ -164,7 +164,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 25 "yacc_spec.y"
+#line 27 "yacc_spec.y"
 
   int ival;
   int sval;       //simbol index
@@ -485,11 +485,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60,    60,    63,    63,    66,    70,    71,    76,
-      80,    80,    87,    90,    95,   106,   107,   110,   111,   112,
-     123,   124,   128,   129,   135,   142,   149,   157,   165,   171,
-     179,   185,   192,   202,   208,   212,   213,   214,   215,   216,
-     217
+       0,    62,    62,    62,    65,    65,    68,    72,    73,    78,
+      82,    82,    89,    92,    97,   108,   109,   112,   113,   114,
+     125,   126,   130,   131,   137,   145,   152,   160,   168,   174,
+     182,   188,   195,   205,   211,   215,   216,   217,   218,   219,
+     220
 };
 #endif
 
@@ -1430,21 +1430,21 @@ yyreduce:
         case 6:
 
 /* Line 1455 of yacc.c  */
-#line 66 "yacc_spec.y"
+#line 68 "yacc_spec.y"
     {encode("import\n");}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 76 "yacc_spec.y"
+#line 78 "yacc_spec.y"
     {built_in();encode("function main\n");}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 90 "yacc_spec.y"
+#line 92 "yacc_spec.y"
     {
                                          //generar #header si es necesario
                                          encode("function %s\n",getsim((yyvsp[(2) - (4)].sval))->name);
@@ -1454,7 +1454,7 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 96 "yacc_spec.y"
+#line 98 "yacc_spec.y"
     {
 					  getsim((yyvsp[(2) - (5)].sval))->ival=(yyvsp[(4) - (5)].ival);
 					  encode("function %s\n",getsim((yyvsp[(2) - (5)].sval))->name);
@@ -1468,52 +1468,52 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 106 "yacc_spec.y"
+#line 108 "yacc_spec.y"
     {(yyval.ival)=1;push_sim((yyvsp[(1) - (1)].sval));}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 107 "yacc_spec.y"
+#line 109 "yacc_spec.y"
     {(yyval.ival)=1+(yyvsp[(3) - (3)].ival);push_sim((yyvsp[(1) - (3)].sval));}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 110 "yacc_spec.y"
+#line 112 "yacc_spec.y"
     {encode("return sim %s\n",getsim((yyvsp[(2) - (3)].ival))->name); }
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 111 "yacc_spec.y"
+#line 113 "yacc_spec.y"
     {yyerror("Return without a value or simbol");}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 112 "yacc_spec.y"
+#line 114 "yacc_spec.y"
     {encode("return const 0\n");}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 135 "yacc_spec.y"
+#line 138 "yacc_spec.y"
     {
-                               getsim((yyvsp[(1) - (3)].sval))->stype=(yyvsp[(3) - (3)].ival);
-                               encode("pop %s\n",getsim((yyvsp[(1) - (3)].sval))->name);
-                              }
+  getsim((yyvsp[(1) - (3)].sval))->stype=(yyvsp[(3) - (3)].ival);
+  encode("pop %s\n",getsim((yyvsp[(1) - (3)].sval))->name);
+}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 143 "yacc_spec.y"
+#line 146 "yacc_spec.y"
     {
   (yyval.ival)=getsim((yyvsp[(1) - (2)].sval))->stype;
   encode("push sim %s\n",getsim((yyvsp[(1) - (2)].sval))->name);
@@ -1524,7 +1524,7 @@ yyreduce:
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 150 "yacc_spec.y"
+#line 153 "yacc_spec.y"
     {
   (yyval.ival)=S_INT;
   encode("push const %d\n",(yyvsp[(1) - (2)].ival));
@@ -1535,7 +1535,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 158 "yacc_spec.y"
+#line 161 "yacc_spec.y"
     {
   (yyval.ival)=S_STRING;
   encode("push const %s\n",(yyvsp[(1) - (2)].literal));
@@ -1546,7 +1546,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 166 "yacc_spec.y"
+#line 169 "yacc_spec.y"
     {
   (yyval.ival)=getsim((yyvsp[(1) - (1)].sval))->stype;
   encode("push sim %s\n",getsim((yyvsp[(1) - (1)].sval))->name);
@@ -1556,7 +1556,7 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 172 "yacc_spec.y"
+#line 175 "yacc_spec.y"
     { 
   (yyval.ival)=S_INT;
   getsim((yyvsp[(1) - (1)].ival))->stype=S_INT;
@@ -1567,7 +1567,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 180 "yacc_spec.y"
+#line 183 "yacc_spec.y"
     {
   (yyval.ival)=S_STRING;
   encode("push const %s\n",(yyvsp[(1) - (1)].literal)); 
@@ -1577,7 +1577,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 186 "yacc_spec.y"
+#line 189 "yacc_spec.y"
     {
   (yyval.ival)=S_INT;
 }
@@ -1586,7 +1586,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 193 "yacc_spec.y"
+#line 196 "yacc_spec.y"
     {
   pushcode("add\n");     //apilo código para descargarlo en EXP
 }
@@ -1595,7 +1595,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 202 "yacc_spec.y"
+#line 205 "yacc_spec.y"
     {
 					     if (getsim((yyvsp[(1) - (4)].sval))->ival != (yyvsp[(3) - (4)].ival))
 					       yyerror("Function bad called. Wrong parametres number");
@@ -1606,49 +1606,49 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 208 "yacc_spec.y"
+#line 211 "yacc_spec.y"
     {encode("call %s\n",getsim((yyvsp[(1) - (3)].sval))->name); }
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 212 "yacc_spec.y"
+#line 215 "yacc_spec.y"
     {(yyval.ival)=1; encode("push sim %s\n",getsim((yyvsp[(1) - (1)].sval))->name); }
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 213 "yacc_spec.y"
+#line 216 "yacc_spec.y"
     {(yyval.ival)=1+(yyvsp[(3) - (3)].ival); encode("push sim %s\n",getsim((yyvsp[(1) - (3)].sval))->name); }
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 214 "yacc_spec.y"
+#line 217 "yacc_spec.y"
     {(yyval.ival)=1; encode("push const %d\n",(yyvsp[(1) - (1)].ival)); }
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 215 "yacc_spec.y"
+#line 218 "yacc_spec.y"
     {(yyval.ival)=1+(yyvsp[(3) - (3)].ival); encode("push const %d\n",(yyvsp[(1) - (3)].ival)); }
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 216 "yacc_spec.y"
+#line 219 "yacc_spec.y"
     {(yyval.ival)=1; encode("push const %s\n",(yyvsp[(1) - (1)].literal)); }
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 217 "yacc_spec.y"
+#line 220 "yacc_spec.y"
     {(yyval.ival)=1+(yyvsp[(3) - (3)].ival); encode("push const %s\n",(yyvsp[(1) - (3)].literal)); }
     break;
 
@@ -1867,7 +1867,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 221 "yacc_spec.y"
+#line 224 "yacc_spec.y"
  
 
 

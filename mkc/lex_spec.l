@@ -22,7 +22,7 @@ ID       [a-z0-9.]*
 
 ^\n                /* blank line - noting */
 
-{BLANK}+"#".+      /* comment - noting */
+{BLANK}*"#".+      /* comment - noting */
 
 "import"           return IMPORT;
 
