@@ -11,7 +11,8 @@ function main()
 {
 a=3
 b=3+a
-a=f1(b)
+#a=f1(b)
+z=
 b=f1(3,a,6)
 m1='cadena1'
 m2='cadena2'

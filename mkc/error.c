@@ -10,6 +10,12 @@ extern int yylineno;
 char *rbuf;
 int rbuf_sz = 200;
 
+
+void error(char *msg){
+  yyerror(msg);
+}
+
+/*
 void error(char *msg){
   //fprintf(stderr,"line %d: %s\n",yylineno,str);
   //char line[200];
@@ -30,7 +36,7 @@ void error(char *msg){
   }
   strcat(rbuf,line);
 }
-
+*/
 
 
 void iferror(){

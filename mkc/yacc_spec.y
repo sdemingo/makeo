@@ -12,7 +12,7 @@
 
   void yyerror(const char *str)
   {
-    printf ("llamo a yyerror con str(%s)\n",str);
+    //printf ("llamo a yyerror con str(%s)\n",str);
     if (str!=NULL)
       fprintf(stderr,"line %d: %s\n",yylineno,str);
   }
@@ -60,6 +60,8 @@
 %type <ival> PARAM_CALL
 
 %type <buf_code> EXP2
+
+
 
 %%
 
@@ -126,9 +128,8 @@ similares a las que hemos usado con las funciones, separando la
 cabecera de la estructura y luego el bloque de código*/
 
 
-BLOCK_SENT: BLOCK_SENT SENT     {iferror();}
+BLOCK_SENT: BLOCK_SENT SENT     
 | /* vacio */
-
 
 
 SENT : ASIG 
@@ -144,6 +145,7 @@ ASIG: ID ASIG_OP EXP
   encode("pop %s\n",getsim($1)->name);
 }
 ;
+
 
 
 EXP: ID EXP2             
