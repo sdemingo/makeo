@@ -83,7 +83,7 @@ char* path(char *mod){
     modpath=strcat(modpath,mod);
     return modpath;
   }else{
-    yyerror("Environment variable MKPATH not defined");
+    error("Environment variable MKPATH not defined");
     return NULL;
   }
 }
@@ -103,7 +103,7 @@ void link_il(char *mod){
   fd=fopen(path(mod),"r");
 
   if (fd==NULL){
-    yyerror("Module file not found");
+    error("Module file not found");
   }else{
     fputc('\n',out);
     for (; (rc = getc(fd)) != EOF;)
@@ -127,7 +127,7 @@ void load_il(char *mod){
   fd=fopen(path(mod),"r");
 
   if (fd==NULL){
-    yyerror("Module file not found");
+    error("Module file not found");
   }else{
     while (fgets(lin, 512, fd) != NULL){
       if (strstr(lin,"#header")){
@@ -145,3 +145,4 @@ void load_il(char *mod){
     close(fd);
   }
 }
+

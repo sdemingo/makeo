@@ -8,12 +8,16 @@
   
   extern int yylineno;
   int sim_i;
-  
+
+
   void yyerror(const char *str)
   {
-    fprintf(stderr,"line %d: %s\n",yylineno,str);
+    printf ("llamo a yyerror con str(%s)\n",str);
+    if (str!=NULL)
+      fprintf(stderr,"line %d: %s\n",yylineno,str);
   }
-  
+
+ 
   
   void built_in(){
     load_il("sys.il");
@@ -69,9 +73,9 @@ IMPORT_DEF: IMPORT ID                     {encode("import\n");}
 ;
 
 
-FUNC_MAIN_CODE: FUNC_MAIN_HDR BLOCK_START BLOCK_SENT BLOCK_END 
+FUNC_MAIN_CODE: FUNC_MAIN_HDR BLOCK_START BLOCK_SENT BLOCK_END       
 | FUNC_MAIN_HDR SENT       
-		/*|  error  {yyerror("Falta funcion main");exit(-1);}  */
+		/*|  error  {error("Falta funcion main");exit(-1);}  */
 ;
 
 
@@ -110,7 +114,7 @@ PARAM_DEF: ID                            {$$=1;push_sim($1);}
 ;
 
 RETURN_SENT: RETURN EXP BLOCK_END         {encode("return sim %s\n",getsim($2)->name); }
-| RETURN BLOCK_END                       {yyerror("Return without a value or simbol");}
+| RETURN BLOCK_END                       {error("Return without a value or simbol");}
 | BLOCK_END                              {encode("return const 0\n");}
 ;
 
@@ -122,7 +126,7 @@ similares a las que hemos usado con las funciones, separando la
 cabecera de la estructura y luego el bloque de código*/
 
 
-BLOCK_SENT: BLOCK_SENT SENT 
+BLOCK_SENT: BLOCK_SENT SENT     {iferror();}
 | /* vacio */
 
 
@@ -204,7 +208,7 @@ EXP2: ADD EXP
 
 FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       {
 					     if (getsim($1)->ival != $3)
-					       yyerror("Function bad called. Wrong parametres number");
+					       error("Function bad called. Wrong parametres number");
                                              encode("call %s\n",getsim($1)->name); 
                                            }
 
@@ -222,4 +226,7 @@ PARAM_CALL: ID                              {$$=1; encode("push sim %s\n",getsim
 
 
 %% 
+
+
+  //void error(const char *str);
 
