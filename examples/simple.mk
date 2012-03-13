@@ -9,8 +9,8 @@ a=3
 b=3+a
 m1='cadena1'
 m2='cadena2'
-#mt=m1+' '+m2+' cadena3'
-mt=m1+' '+'cadena3'
+mt=m1+' '+m2+' cadena3'
+#mt=m1+' '+'cadena3'
 write('out',mt)
 }
 

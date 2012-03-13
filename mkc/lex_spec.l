@@ -47,6 +47,7 @@ ID       [a-z0-9.]*
 ","                return COMA;
 
 "'".*[^']"'"     {
+                    printf ("Econtrado string %s\n",yytext);
                     strtokens(&yytext);
                     yylval.literal=(char*)malloc(strlen(yytext)+1);
                     yylval.literal=strcpy(yylval.literal,yytext);
