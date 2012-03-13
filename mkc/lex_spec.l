@@ -4,15 +4,15 @@
 #include "y.tab.h"
 
 void strtokens(char **str);
+void yylex2str(char *out,char *lex);
 
 %}
 
 %option yylineno
 
-BLANK    [\t ]
+BLANK    [ \t]
 DIGITO   [0-9]
-ID       [a-z0-9.]*
-
+LETTER   [a-z0-9.]*
 
 %%
 
@@ -46,11 +46,9 @@ ID       [a-z0-9.]*
 
 ","                return COMA;
 
-"'".*[^']"'"     {
-                    printf ("Econtrado string %s\n",yytext);
-                    strtokens(&yytext);
-                    yylval.literal=(char*)malloc(strlen(yytext)+1);
-                    yylval.literal=strcpy(yylval.literal,yytext);
+    
+"'"[^\']*"'"       {
+                    yylex2str(yylval.literal,yytext);
                     return STRING;
                    }   
 
@@ -58,11 +56,14 @@ ID       [a-z0-9.]*
 
 {DIGITO}+.{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 
-{ID}               {if (!strcmp(yytext,"main")) 
+{LETTER}+          {if (!strcmp(yytext,"main")) 
                         return MAIN_ID;
                     else
-                        {yylval.sval=addsim(yytext);return ID;}
+                    {
+                        yylval.sval=addsim(yytext);
+                        return ID;
                     }
+                   }
 
 "+"                return ADD;
 
@@ -82,6 +83,20 @@ ID       [a-z0-9.]*
 int yywrap()
 {
    return(1);
+}
+
+void yylex2str(char *out,char *lex)
+{
+  char *s;
+  out=(char*)malloc(strlen(lex));
+  yylval.literal=strcpy(out,lex);
+  s=lex;
+  while(*s){
+    if (*s=='\'')
+      *out='"';
+    *s++;
+    *out++;
+  }
 }
 
 
