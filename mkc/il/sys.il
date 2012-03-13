@@ -8,7 +8,5 @@ open o
 pop fd
 push sim w_data
 write fd
-push const "\n"
-write fd
 return const 0
 

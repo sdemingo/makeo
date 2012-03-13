@@ -4,27 +4,33 @@
 #include "uval.h"
 
 
+
+
+
 void escapes(char **str){
 
-  char *p,*res,*aux;
+  char *p,*final,*aux;
+  int c;
 
-  res=(char*)malloc(strlen(*str));
-  aux=res;
+  final=(char*)malloc(strlen(*str));
+  aux=final;
 
-  for (p=*str;*p!='\0';p++){
+  for (p=*str;*p!='\0';p++,aux++){
     if (*p=='\\'){ //escape secuence
       p++;
       if (*p=='n')
-	*res=0x0A;
+	*aux=0x0A;
       if (*p=='t')
-	*res=0x09;
+	*aux=0x09;
     }else{
-      *res=*p;
+      *aux=*p;
     }
-    res++;
+    //aux++;
   }
-  *str=aux;
+  *aux='\0';
+  *str=final;
 }
+
 
 
 u_val get_u_val(char *arg){
@@ -37,13 +43,16 @@ u_val get_u_val(char *arg){
   if (((arg[0]=='\'') && (arg[strlen(arg)-1]=='\'')) 
       ||((arg[0]=='"') && (arg[strlen(arg)-1]=='"')) ){
 
-    u.type=STRING;
-    arg[strlen(arg)-1]='\0';
-    u.data.sval=(char*)malloc(strlen(arg)-1);
-    arg++;
+    u.data.sval=(char*)malloc(strlen(arg));
     strcpy(u.data.sval,arg);
-    escapes(&u.data.sval);
-    //u.data.sval[strlen(u.data.sval)-1]='\0';
+ 
+    u.type=STRING;
+    u.data.sval++;
+    u.data.sval[strlen(arg)-2]='\0';
+
+    sprintf(u.data.sval,"%s",u.data.sval);
+    //escapes(&u.data.sval);
+    
 
   }else{
     u.type=INT;
@@ -66,17 +75,20 @@ u_val null_u_val(){
 
 char* u_val2text(u_val u){
 
-  char *str;
- 
-  str=(char*)malloc(50);
+  //char *str;
+  //str=(char*)malloc(50);
+
+  static char str[50];
 
   if (isnull(u))
     return "null";
 
   if (u.type==STRING)
-    strcpy(str,u.data.sval);
-  else if (u.type==INT)
+    return u.data.sval;
+
+  else if (u.type==INT){
     sprintf(str,"%d",u.data.ival);
+  }
 
   return str;
 }

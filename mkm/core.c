@@ -31,8 +31,8 @@ void op_add(com *c){
   if (ures.type==STRING){
     int size=strlen(u1.data.sval)+strlen(u2.data.sval)+1;
     ures.data.sval=(char*)malloc(sizeof(char)*size);
-    strcpy(ures.data.sval,u2.data.sval);
-    strcat(ures.data.sval,u1.data.sval);
+    strcpy(ures.data.sval,u1.data.sval);
+    strcat(ures.data.sval,u2.data.sval);
     ures.data.sval[size]='\0';
   }
   push(ures);
@@ -262,6 +262,7 @@ void proccom(com *c,tab **t){
     if (isnull(u))
       error(c,"empty stack\n");
     addsim(*t,c->arg1,u);
+    //printf ("u_val2text: %s\n",u_val2text(u));
     break;
 
 

@@ -42,8 +42,8 @@ void ptab(tab* t){
     printf ("\tparent:%s\n",t->parent->name);
   else
     printf ("\tparent: NULL \n");
-  for(aux=t->mem;*aux!=NULL;aux++,i++){
-    n=*aux;
+  for (i=0;t->mem[i]!=NULL;i++){
+    n=t->mem[i];
     psim(n);
     printf ("\n");
   }
@@ -57,13 +57,14 @@ void ptab(tab* t){
 
 
 sim* addsim(tab* m,char *tag,u_val v){
-  sim **aux,*n,*c;
+  sim *n,*c;
+  int i;
 
   if (m==NULL)
     return NULL;
 
-  for (aux=m->mem;*aux!=NULL;aux++){
-    n=*aux;
+  for (i=0;m->mem[i]!=NULL;i++){
+    n=m->mem[i];
     if (!strcmp(n->tag,tag)){
       n->val=v;
       return;
@@ -73,25 +74,29 @@ sim* addsim(tab* m,char *tag,u_val v){
   /*
     Si no existe lo creamos
   */
+ 
   c=(sim*)malloc(sizeof(sim));
   if (c==NULL)
     error("No enough memory to simbol %d\n",tag);
-  c->tag=(char*)malloc(strlen(tag)+1);
-  strcpy(c->tag,tag);
-  c->val=v;
 
-  *aux=c;
+  c->val=v;
+  c->tag=(char*)malloc(strlen(tag));
+  strcpy(c->tag,tag);
+
+  m->mem[i]=c;
+  return m->mem[i];
 }
 
 
 sim* getsim(tab* m,char *tag){
   sim **aux,*n;
+  int i;
 
   if (m==NULL)
     return NULL;
   
-  for(aux=m->mem;*aux!=NULL;aux++){
-    n=*aux;
+  for (i=0;m->mem[i]!=NULL;i++){
+    n=m->mem[i];
     if (!strcmp(n->tag,tag))
       return n;
   }
@@ -121,8 +126,10 @@ void newcontext(tab **m,char *name){
   
   t->name=name;
 
-  for (i=0;i<TAB_SIZE;i++)
+  for (i=0;i<TAB_SIZE;i++){
     t->mem[i]=NULL;
+  }
+
   t->items=0;
   t->parent=*m;
 
