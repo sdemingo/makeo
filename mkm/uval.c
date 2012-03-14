@@ -5,30 +5,27 @@
 
 
 
+void svalcpy(char **out,char *str){
+  
+  /* This function copy str, a simple argument for IL code in out. It
+    resolves any escape character and remove quotation marks */
 
+  char *p,*aux;
 
-void escapes(char **str){
-
-  char *p,*final,*aux;
-  int c;
-
-  final=(char*)malloc(strlen(*str));
-  aux=final;
-
-  for (p=*str;*p!='\0';p++,aux++){
+  aux=*out;
+  for (p=str;*p!='\0';p++){
     if (*p=='\\'){ //escape secuence
       p++;
       if (*p=='n')
-	*aux=0x0A;
+	*aux++=0x0A;
       if (*p=='t')
-	*aux=0x09;
+	*aux++=0x09;
     }else{
-      *aux=*p;
-    }
-    //aux++;
+      if (*p!='\"')  //not tokens
+	*aux++=*p;
+    } 
   }
   *aux='\0';
-  *str=final;
 }
 
 
@@ -44,15 +41,8 @@ u_val get_u_val(char *arg){
       ||((arg[0]=='"') && (arg[strlen(arg)-1]=='"')) ){
 
     u.data.sval=(char*)malloc(strlen(arg));
-    strcpy(u.data.sval,arg);
- 
+    svalcpy(&u.data.sval,arg);
     u.type=STRING;
-    u.data.sval++;
-    u.data.sval[strlen(arg)-2]='\0';
-
-    sprintf(u.data.sval,"%s",u.data.sval);
-    //escapes(&u.data.sval);
-    
 
   }else{
     u.type=INT;
@@ -74,9 +64,6 @@ u_val null_u_val(){
 
 
 char* u_val2text(u_val u){
-
-  //char *str;
-  //str=(char*)malloc(50);
 
   static char str[50];
 
