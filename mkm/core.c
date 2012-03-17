@@ -56,6 +56,8 @@ void op_sub(com *c){
     ures.data.ival=u1.data.ival-u2.data.ival;
   if (ures.type==FLOAT)
     ures.data.fval=u1.data.fval-u2.data.fval;
+  if (ures.type==STRING)
+    error(c,"sub operation not allowed for string\n");
   push(ures);
 }
 
@@ -77,6 +79,9 @@ void op_mul(com *c){
     ures.data.ival=u1.data.ival*u2.data.ival;
   if (ures.type==FLOAT)
     ures.data.fval=u1.data.fval*u2.data.fval;
+  if (ures.type==STRING)
+    error(c,"sub operation not allowed for string\n");
+
   push(ures);
 }
 
@@ -161,7 +166,6 @@ void io_op(com *c,tab *t){
 
 
 void eval_op(com *c){
-  
   
   if (!strcmp(c->cmd,"add")){
     op_add(c);

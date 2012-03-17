@@ -54,7 +54,7 @@ LETTER   [a-z0-9.]*
 
 {DIGITO}+                   {yylval.ival=atoi(yytext); return INT;}
 
-{DIGITO}+.{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
+{DIGITO}+"."{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 
 {LETTER}+          {if (!strcmp(yytext,"main")) 
                         return MAIN_ID;
@@ -67,11 +67,11 @@ LETTER   [a-z0-9.]*
 
 "+"                return ADD;
 
-"-"                //printf( "[SUB]\n"); 
+"-"                return SUB; 
 
-"*"                //printf( "[MUL]\n"); 
+"*"                return MUL; 
 
-"/"                //printf( "[DIV]\n"); 
+"/"                return DIV; 
 
 \n                 //return END_SENT;
 

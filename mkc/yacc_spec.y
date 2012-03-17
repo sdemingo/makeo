@@ -41,6 +41,9 @@
 %token <ival> INT
 
 %token ADD
+%token SUB
+%token MUL
+%token DIV
 %token END_SENT
 %token STRING
 
@@ -202,6 +205,23 @@ EXP2: ADD EXP
 {
   pushcode("add\n");     //apilo código para descargarlo en EXP
 }
+
+
+| SUB EXP
+{
+  if ($2==S_STRING)
+    error("Operation not allowed");
+  else
+    pushcode("sub\n");
+} 
+
+| MUL EXP
+{
+  if ($2==S_STRING)
+    error("Operation not allowed");
+  else
+    pushcode("mul\n");
+} 
 ;
 
 

@@ -43,17 +43,20 @@
      ASIG_OP = 259,
      INT = 260,
      ADD = 261,
-     END_SENT = 262,
-     STRING = 263,
-     IMPORT = 264,
-     FUNCTION = 265,
-     RETURN = 266,
-     MAIN_ID = 267,
-     BLOCK_START = 268,
-     BLOCK_END = 269,
-     PAR_A = 270,
-     PAR_C = 271,
-     COMA = 272
+     SUB = 262,
+     MUL = 263,
+     DIV = 264,
+     END_SENT = 265,
+     STRING = 266,
+     IMPORT = 267,
+     FUNCTION = 268,
+     RETURN = 269,
+     MAIN_ID = 270,
+     BLOCK_START = 271,
+     BLOCK_END = 272,
+     PAR_A = 273,
+     PAR_C = 274,
+     COMA = 275
    };
 #endif
 /* Tokens.  */
@@ -61,17 +64,20 @@
 #define ASIG_OP 259
 #define INT 260
 #define ADD 261
-#define END_SENT 262
-#define STRING 263
-#define IMPORT 264
-#define FUNCTION 265
-#define RETURN 266
-#define MAIN_ID 267
-#define BLOCK_START 268
-#define BLOCK_END 269
-#define PAR_A 270
-#define PAR_C 271
-#define COMA 272
+#define SUB 262
+#define MUL 263
+#define DIV 264
+#define END_SENT 265
+#define STRING 266
+#define IMPORT 267
+#define FUNCTION 268
+#define RETURN 269
+#define MAIN_ID 270
+#define BLOCK_START 271
+#define BLOCK_END 272
+#define PAR_A 273
+#define PAR_C 274
+#define COMA 275
 
 
 
@@ -91,7 +97,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 95 "y.tab.h"
+#line 101 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
