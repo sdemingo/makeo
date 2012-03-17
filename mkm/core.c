@@ -350,7 +350,7 @@ void proccom(com *c,tab **t){
     if (isnull(u))
       error(c,"Return address not defined\n");
     pcounter=s->val.data.ival;   //return to the caller
-    delcontext(t);
+    //delcontext(t);
     break;
 
   case C_IO:

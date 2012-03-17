@@ -4,7 +4,8 @@ extern FILE *yyin;
 extern FILE *out;
 
 int main (int argc, char **argv){
- 
+  int sdebug=0;
+
   ++argv, --argc;
   if (argv[0][0]!='-')
     yyin = fopen(argv[0], "r" );
@@ -17,6 +18,9 @@ int main (int argc, char **argv){
       case 'o':
 	if (argv[2]!=NULL)
 	  out=fopen(argv[2],"w");
+      case 's':
+	printf ("bla");
+	sdebug=1;
       }
     }
     ++argv;
@@ -28,7 +32,8 @@ int main (int argc, char **argv){
  
   yyparse();
 
-  //dump();
+  if (sdebug)
+    dump();
   
   return 0;
 }

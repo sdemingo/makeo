@@ -48,7 +48,6 @@ int main (int argc, char **argv){
 
 
   mtab=NULL;
-
   initstack();
   newcontext(&mtab,"global");
   initparser(argv[1],mtab);
@@ -63,7 +62,7 @@ int main (int argc, char **argv){
       pstack_line();
       printf("\n");
       printcom(c);
-printf("\n");
+      printf("\n");
       
     }
     proccom(c,&mtab);

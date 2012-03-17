@@ -48,7 +48,6 @@ void ptab(tab* t){
     printf ("\n");
   }
   
-  //imprimo las tablas padre
   if (t->parent!=NULL)
     ptab(t->parent);
   
@@ -72,7 +71,7 @@ sim* addsim(tab* m,char *tag,u_val v){
   }
 
   /*
-    Si no existe lo creamos
+    If it doesn't exist, we create it
   */
  
   c=(sim*)malloc(sizeof(sim));
@@ -100,25 +99,25 @@ sim* getsim(tab* m,char *tag){
     if (!strcmp(n->tag,tag))
       return n;
   }
-  
-  //si no existe busco en el contexto padre
+
+  /* 
+     If the sim does not exists here, it looks for in the root table
+    */
+
   if (m->parent!=NULL)
-    return getsim(m->parent,tag);
+    return getsim(m->root,tag);
   else
-    return NULL;  //y si no existe, ¿que devuelvo?  
+    return NULL;
+  
 }
 
 
 
 
 void newcontext(tab **m,char *name){
-  /*
-    Creamos un nuevo contexto que siempre sera
-    hijo del main actual
-   */
-
+  
   int i;
-  tab *t; //nueva tabla
+  tab *t; //new table
 
   t=(tab*)malloc(sizeof(tab));
   if (t==NULL)
@@ -132,16 +131,20 @@ void newcontext(tab **m,char *name){
 
   t->items=0;
   t->parent=*m;
-
+  if (t->parent==NULL) //is the root table
+    t->root=t;
+  else
+    t->root=(*m)->root;
+    
   *m=t;
 }
 
 
 
 void delcontext(tab **m){
+
   /*
-    Borra el contexto actual.
-    Se llama en return
+    Leak.
    */
   
   tab *aux=*m;

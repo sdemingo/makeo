@@ -1,7 +1,9 @@
 
-enum Stype {S_INT,
+enum Stype {S_NULL,
+            S_INT,
 	    S_FLOAT,
-	    S_STRING};
+	    S_STRING,
+            S_FCALL};
 
 
 struct Sim{

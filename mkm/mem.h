@@ -18,6 +18,7 @@ struct tab{
   sim *mem[TAB_SIZE];
   int items;
   struct tab* parent;
+  struct tab* root;
 }; 
 typedef struct tab tab;
 

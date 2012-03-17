@@ -52,7 +52,10 @@ LETTER   [a-z0-9.]*
                     return STRING;
                    }   
 
-{DIGITO}+                   {yylval.ival=atoi(yytext); return INT;}
+{DIGITO}+                   {
+                             yylval.ival=atoi(yytext); 
+                             return INT;
+                            }
 
 {DIGITO}+"."{DIGITO}+         printf( "[FLOAT] (%s)\n", yytext);
 

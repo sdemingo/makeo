@@ -28,6 +28,7 @@ void init_sim(){
   
   nullsim=(Sim*)malloc(sizeof(Sim));
   nullsim->name=(char*)malloc(sizeof(char)*50);
+  nullsim->stype=S_NULL;
   strcpy(nullsim->name,"unknow sim");  
   memset(simstack,-1,MAX_SIM);
 }
@@ -69,7 +70,7 @@ void dump(){
 
   printf (" - TABLA DE SIMBOLOS - \n");
   for (i=0;i<tlast;i++){
-    printf ("     %s\n",simtab[i].name);
+    printf ("     %s(%d)\n",simtab[i].name,simtab[i].stype);
   }
   printf ("\n");
 }
