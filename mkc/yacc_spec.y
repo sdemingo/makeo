@@ -150,6 +150,83 @@ ASIG: ID ASIG_OP EXP
 ;
 
 
+EXP: EXP2 ID
+{
+  $$=getsim($2)->stype;
+  encode("push sim %s\n",getsim($2)->name);
+  dumpcode();               //codigo apilado desde EXP2
+}
+
+| EXP2 INT
+{
+  $$=S_INT;
+  encode("push const %d\n",$2);
+  dumpcode();               //codigo apilado desde EXP2
+}
+
+
+| EXP2 STRING
+{
+  $$=S_STRING;
+  encode("push const %s\n",$2);
+  dumpcode();               //codigo apilado desde EXP2
+}
+
+| ID
+{
+  $$=getsim($1)->stype;
+  encode("push sim %s\n",getsim($1)->name);
+}
+
+| INT
+{ 
+  $$=S_INT;
+  getsim($1)->stype=S_INT;
+  encode("push const %d\n",$1);
+}
+
+
+| STRING
+{
+  $$=S_STRING;
+  encode("push const %s\n",$1); 
+} 
+
+| FUNC_CALL              
+{
+  $$=S_INT;
+}
+;
+
+
+EXP2: EXP SUB
+{
+  if ($1==S_STRING)
+    error("Operation not allowed");
+  else
+    pushcode("sub\n");
+} 
+
+| EXP MUL
+{
+  if ($1==S_STRING)
+    error("Operation not allowed");
+  else
+    pushcode("mul\n");
+} 
+
+| EXP ADD
+{
+  pushcode("add\n");
+} 
+;
+
+
+
+
+/*
+
+  Expresiones recursivas a derechas
 
 EXP: ID EXP2             
 {
@@ -223,6 +300,8 @@ EXP2: ADD EXP
     pushcode("mul\n");
 } 
 ;
+*/
+
 
 
 

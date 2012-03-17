@@ -31,8 +31,8 @@ void op_add(com *c){
   if (ures.type==STRING){
     int size=strlen(u1.data.sval)+strlen(u2.data.sval)+1;
     ures.data.sval=(char*)malloc(sizeof(char)*size);
-    strcpy(ures.data.sval,u1.data.sval);
-    strcat(ures.data.sval,u2.data.sval);
+    strcpy(ures.data.sval,u2.data.sval);
+    strcat(ures.data.sval,u1.data.sval);
     ures.data.sval[size]='\0';
   }
   push(ures);
@@ -53,9 +53,9 @@ void op_sub(com *c){
   
   ures.type=u1.type;
   if (ures.type==INT)
-    ures.data.ival=u1.data.ival-u2.data.ival;
+    ures.data.ival=u2.data.ival-u1.data.ival;
   if (ures.type==FLOAT)
-    ures.data.fval=u1.data.fval-u2.data.fval;
+    ures.data.fval=u2.data.fval-u1.data.fval;
   if (ures.type==STRING)
     error(c,"sub operation not allowed for string\n");
   push(ures);
