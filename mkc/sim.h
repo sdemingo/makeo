@@ -3,7 +3,9 @@ enum Stype {S_NULL,
             S_INT,
 	    S_FLOAT,
 	    S_STRING,
-            S_FCALL};
+            S_FCALL,
+	    S_PARAM,
+};
 
 
 struct Sim{
@@ -19,6 +21,7 @@ typedef struct Sim Sim;
 
 int addsim(char *sim);
 Sim *getsim(int id);
+int cmptypes(int t1,int t2);
 void dump();
 
  

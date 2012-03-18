@@ -4,14 +4,15 @@
     # generar el codigo intermedio que ejecutará mkm 
 
 
-function mensaje(a)
+function f2(hdr)
 {
-	return a
+	msg='inicio del mensaje: '+hdr
+	return msg
 }
 
 function suma(a,b)
 {
-	z=a+a
+	z=a+b
 	return z
 }
 
@@ -20,7 +21,7 @@ function main()
 	a=1
 	b=3
 	c=5
-	#msg='mensaje literal'
+	m='mensaje literal'
 	z=a+1+c
 	a=write('out',z)
 	 #a=write('out',o)

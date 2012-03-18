@@ -24,6 +24,18 @@ int head=0;
 Sim *nullsim;
 
 
+
+int cmptypes(int t1,int t2){
+
+  if ((t1==S_PARAM) || (t2==S_PARAM))
+    return 1;
+  else
+    return t1==t2;
+}
+
+
+
+
 void init_sim(){
   
   nullsim=(Sim*)malloc(sizeof(Sim));
@@ -32,6 +44,7 @@ void init_sim(){
   strcpy(nullsim->name,"unknow sim");  
   memset(simstack,-1,MAX_SIM);
 }
+
 
 /*
   Funciones de la tabla de simbolos
@@ -48,6 +61,7 @@ int addsim(char *sim){
   if (tlast<MAX_SIM){
     simtab[id].name=malloc(strlen(sim));
     simtab[id].name=strcpy(simtab[tlast].name,sim);
+    simtab[id].stype=S_NULL;
     tlast++;
     return id;
   }
@@ -57,8 +71,10 @@ int addsim(char *sim){
 
 Sim *getsim(int id)
 { 
-  if ((id<0) || (id>=MAX_SIM))
+  if ((id<0) || (id>=MAX_SIM)){
+    printf ("Acceso a simbolo inexistente\n");
     return nullsim;
+  }
   
   return &simtab[id];
 }
@@ -67,12 +83,44 @@ Sim *getsim(int id)
 void dump(){
   
   int i;
-
+  
   printf (" - TABLA DE SIMBOLOS - \n");
   for (i=0;i<tlast;i++){
-    printf ("     %s(%d)\n",simtab[i].name,simtab[i].stype);
+    printf ("\t");
+    text(simtab[i]);
+    printf ("\n");
   }
   printf ("\n");
+}
+
+
+void text(Sim si){
+
+  char *s;
+  
+  s=(char*)malloc(strlen(si.name)+20);
+  strcpy(s,si.name);
+  switch(si.stype){
+  case S_INT:
+    strcat(s," [INT]");
+    break;
+  case S_FLOAT:
+    strcat(s," [FLOAT]");
+    break;
+  case S_STRING:
+    strcat(s," [STRING]");
+    break;
+  case S_FCALL:
+    strcat(s," [FCALL]");
+    break;
+  case S_PARAM:
+    strcat(s," [PARAM]");
+    break;
+  case S_NULL:
+    strcat(s," [NULL]");
+    break;
+  }
+  printf("%s",s);
 }
 
 
@@ -93,10 +141,6 @@ void copy(Sim *dest,Sim *src){
     strcpy(dest->name,src->name);
   }
 }
-
-
-
-
 
 
 

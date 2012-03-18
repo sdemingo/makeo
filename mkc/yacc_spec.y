@@ -58,12 +58,12 @@
 %token COMA
 
 %type <ival> EXP
+%type <ival> EXP2
+%type <ival> RETURN_SENT
+%type <ival> FUNC_HDR
 %type <literal> STRING
 %type <ival> PARAM_DEF
 %type <ival> PARAM_CALL
-
-%type <buf_code> EXP2
-
 
 
 %%
@@ -96,31 +96,63 @@ FUNCS : FUNC_CODE | FUNCS FUNC_CODE
 /* Reglas para la declaración de funciones */
 
 FUNC_CODE : FUNC_HDR BLOCK_START BLOCK_SENT RETURN_SENT 
+{
+  getsim($4)->stype=$4;
+}
 ;
 
-FUNC_HDR: FUNCTION ID PAR_A PAR_C      {
-                                         //generar #header si es necesario
-                                         encode("function %s\n",getsim($2)->name);
-                                       } 
+FUNC_HDR: FUNCTION ID PAR_A PAR_C      
+{
+  $$=$2;    //index of func name simbol
+  //generar #header si es necesario
+  encode("function %s\n",getsim($2)->name);
+} 
+
 
 | FUNCTION ID PAR_A PARAM_DEF PAR_C    
-					{
-					  getsim($2)->ival=$4;
-					  encode("function %s\n",getsim($2)->name);
-					  while ((sim_i=pull_sim())>=0)
-					    {
-					      encode ("pop %s\n",getsim(sim_i)->name);
-					    }
-					} 
+{
+  $$=$2;    //index of func name simbol
+  getsim($2)->ival=$4; //num of params
+  encode("function %s\n",getsim($2)->name);
+  while ((sim_i=pull_sim())>=0)
+    {
+      encode ("pop %s\n",getsim(sim_i)->name);
+    }
+} 
 ;
 
-PARAM_DEF: ID                            {$$=1;push_sim($1);}
-| ID COMA PARAM_DEF                      {$$=1+$3;push_sim($1);}
+
+PARAM_DEF: ID                            
+{
+  $$=1;
+  push_sim($1);
+  getsim($1)->stype=S_PARAM;
+}
+
+| ID COMA PARAM_DEF                      
+{
+  $$=1+$3;
+  push_sim($1);
+  getsim($1)->stype=S_PARAM;
+}
 ;
 
-RETURN_SENT: RETURN EXP BLOCK_END         {encode("return sim %s\n",getsim($2)->name); }
-| RETURN BLOCK_END                       {error("Return without a value or simbol");}
-| BLOCK_END                              {encode("return const 0\n");}
+
+RETURN_SENT: RETURN EXP BLOCK_END        
+{
+  encode("return sim %s\n",getsim($2)->name); 
+  $$=getsim($2)->stype;
+}
+
+| RETURN BLOCK_END                       
+{ error("Return without a value or simbol");}
+
+
+| BLOCK_END                              
+{ 
+  encode("return const 0\n");
+  $$=S_NULL;
+}
 ;
 
 
@@ -152,13 +184,17 @@ ASIG: ID ASIG_OP EXP
 
 EXP: EXP2 ID
 {
-  $$=getsim($2)->stype;
+  if (cmptypes($1,getsim($2)->stype))
+    error("Type error");
+  $$=$1;
   encode("push sim %s\n",getsim($2)->name);
   dumpcode();               //codigo apilado desde EXP2
 }
 
 | EXP2 INT
-{
+{  
+  if (cmptypes($1,S_INT))
+    error("Type error");
   $$=S_INT;
   encode("push const %d\n",$2);
   dumpcode();               //codigo apilado desde EXP2
@@ -167,6 +203,8 @@ EXP: EXP2 ID
 
 | EXP2 STRING
 {
+  if (cmptypes($1,S_STRING))
+    error("Type error");
   $$=S_STRING;
   encode("push const %s\n",$2);
   dumpcode();               //codigo apilado desde EXP2
@@ -174,6 +212,8 @@ EXP: EXP2 ID
 
 | ID
 {
+  //if (getsim($1)->stype==S_NULL)
+  //  error("a id must be incializated before using it");
   $$=getsim($1)->stype;
   encode("push sim %s\n",getsim($1)->name);
 }
@@ -195,112 +235,38 @@ EXP: EXP2 ID
 | FUNC_CALL              
 {
   $$=S_INT;
+  /*
+    Deberiamos subir el tipo de codigo devuelto por return.
+    Este lo podemos obtener de la tabla de simbolos
+   */
 }
 ;
 
 
 EXP2: EXP SUB
 {
-  if ($1==S_STRING)
+  if (cmptypes($1,S_STRING))
     error("Operation not allowed");
   else
     pushcode("sub\n");
+  $$=$1;
 } 
 
 | EXP MUL
 {
-  if ($1==S_STRING)
+  if (cmptypes($1,S_STRING))
     error("Operation not allowed");
   else
     pushcode("mul\n");
+  $$=$1;
 } 
 
 | EXP ADD
 {
   pushcode("add\n");
+  $$=$1;
 } 
 ;
-
-
-
-
-/*
-
-  Expresiones recursivas a derechas
-
-EXP: ID EXP2             
-{
-  $$=getsim($1)->stype;
-  encode("push sim %s\n",getsim($1)->name);
-  dumpcode();               //codigo apilado desde EXP2
-}
-
-| INT EXP2
-{
-  $$=S_INT;
-  encode("push const %d\n",$1);
-  dumpcode();               //codigo apilado desde EXP2
-}
-
-
-| STRING EXP2
-{
-  $$=S_STRING;
-  encode("push const %s\n",$1);
-  dumpcode();               //codigo apilado desde EXP2
-}
-
-
-| ID    
-{
-  $$=getsim($1)->stype;
-  encode("push sim %s\n",getsim($1)->name);
-}
-
-| INT
-{ 
-  $$=S_INT;
-  getsim($1)->stype=S_INT;
-  encode("push const %d\n",$1);
-}
-
-
-| STRING
-{
-  $$=S_STRING;
-  encode("push const %s\n",$1); 
-} 
-
-| FUNC_CALL              
-{
-  $$=S_INT;
-}
-;
-
-
-EXP2: ADD EXP           
-{
-  pushcode("add\n");     //apilo código para descargarlo en EXP
-}
-
-
-| SUB EXP
-{
-  if ($2==S_STRING)
-    error("Operation not allowed");
-  else
-    pushcode("sub\n");
-} 
-
-| MUL EXP
-{
-  if ($2==S_STRING)
-    error("Operation not allowed");
-  else
-    pushcode("mul\n");
-} 
-;
-*/
 
 
 

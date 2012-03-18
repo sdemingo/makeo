@@ -4,7 +4,7 @@
     # generar el codigo intermedio que ejecutará mkm 
 function f1(a,b){
 	pat=9
-	z=a+b+pat
+	z=pat+a+b
 }
 
 
