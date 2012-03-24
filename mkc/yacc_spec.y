@@ -61,6 +61,8 @@
 
 %type <ival> EXP
 %type <ival> EXP2
+%type <ival> LEXP
+%type <ival> LEXP2
 %type <ival> RETURN_SENT
 %type <ival> FUNC_HDR
 %type <literal> STRING
@@ -284,11 +286,18 @@ EXP2: EXP SUB
 
 /* Booleans expresions  */
 
-LEXP: ID EQ ID
+LEXP: LEXP2 ID
 {
-  encode("eq\n");
+  encode("push sim %s\n",getsim($2)->name);
+  dumpcode();
 }
+;
 
+LEXP2: ID EQ
+{
+  pushcode("eq\n");
+  pushcode("push sim %s\n",getsim($1)->name);
+}
 ;
 
 
