@@ -56,6 +56,8 @@
 %token PAR_A
 %token PAR_C
 %token COMA
+%token IF
+%token EQ
 
 %type <ival> EXP
 %type <ival> EXP2
@@ -84,7 +86,10 @@ FUNC_MAIN_CODE: FUNC_MAIN_HDR BLOCK_START BLOCK_SENT BLOCK_END
 ;
 
 
-FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      {built_in();encode("function main\n");} 
+FUNC_MAIN_HDR: FUNCTION MAIN_ID PAR_A PAR_C      
+{
+  built_in();encode("function main\n");
+} 
 ;
 
 
@@ -169,14 +174,24 @@ BLOCK_SENT: BLOCK_SENT SENT
 
 SENT : ASIG 
 | FUNC_CALL 
+| IF_SENT
 ;
 
 
 
+/*
+  Expresiones
+ */
 
 ASIG: ID ASIG_OP EXP          
 {
   getsim($1)->stype=$3;
+  encode("pop %s\n",getsim($1)->name);
+}
+
+| ID ASIG_OP LEXP
+{
+  getsim($1)->stype=S_BOOLEAN;
   encode("pop %s\n",getsim($1)->name);
 }
 ;
@@ -184,7 +199,7 @@ ASIG: ID ASIG_OP EXP
 
 EXP: EXP2 ID
 {
-  if (cmptypes($1,getsim($2)->stype))
+  if (!cmptypes($1,getsim($2)->stype))
     error("Type error");
   $$=$1;
   encode("push sim %s\n",getsim($2)->name);
@@ -193,8 +208,8 @@ EXP: EXP2 ID
 
 | EXP2 INT
 {  
-  if (cmptypes($1,S_INT))
-    error("Type error");
+  if (!cmptypes($1,S_INT))
+    error("Type error. Integer expected");
   $$=S_INT;
   encode("push const %d\n",$2);
   dumpcode();               //codigo apilado desde EXP2
@@ -203,8 +218,8 @@ EXP: EXP2 ID
 
 | EXP2 STRING
 {
-  if (cmptypes($1,S_STRING))
-    error("Type error");
+  if (!cmptypes($1,S_STRING))
+    error("Type error. String expected");
   $$=S_STRING;
   encode("push const %s\n",$2);
   dumpcode();               //codigo apilado desde EXP2
@@ -212,7 +227,7 @@ EXP: EXP2 ID
 
 | ID
 {
-  //if (getsim($1)->stype==S_NULL)
+  //1if (getsim($1)->stype==S_NULL)
   //  error("a id must be incializated before using it");
   $$=getsim($1)->stype;
   encode("push sim %s\n",getsim($1)->name);
@@ -234,19 +249,17 @@ EXP: EXP2 ID
 
 | FUNC_CALL              
 {
-  $$=S_INT;
-  /*
-    Deberiamos subir el tipo de codigo devuelto por return.
-    Este lo podemos obtener de la tabla de simbolos
-   */
+  $$=S_PARAM;
 }
 ;
 
 
+/* Math expresions */
+
 EXP2: EXP SUB
 {
-  if (cmptypes($1,S_STRING))
-    error("Operation not allowed");
+  if (!cmptypes($1,S_STRING))
+    error("Operation not allowed with strings");
   else
     pushcode("sub\n");
   $$=$1;
@@ -254,8 +267,8 @@ EXP2: EXP SUB
 
 | EXP MUL
 {
-  if (cmptypes($1,S_STRING))
-    error("Operation not allowed");
+  if (!cmptypes($1,S_STRING))
+    error("Operation not allowed with strings");
   else
     pushcode("mul\n");
   $$=$1;
@@ -269,31 +282,82 @@ EXP2: EXP SUB
 ;
 
 
+/* Booleans expresions  */
 
+LEXP: ID EQ ID
+{
+  encode("eq\n");
+}
 
-/* Reglas para la llamada a funciones */
-
-FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       {
-					     if (getsim($1)->ival != $3)
-					       error("Function bad called. Wrong parametres number");
-                                             encode("call %s\n",getsim($1)->name); 
-                                           }
-
-| ID PAR_A PAR_C                      {encode("call %s\n",getsim($1)->name); }
 ;
 
 
-PARAM_CALL: ID                              {$$=1; encode("push sim %s\n",getsim($1)->name); }
-| ID COMA PARAM_CALL                        {$$=1+$3; encode("push sim %s\n",getsim($1)->name); }
-| INT                                       {$$=1; encode("push const %d\n",$1); }
-| INT COMA PARAM_CALL                       {$$=1+$3; encode("push const %d\n",$1); }
-| STRING                                    {$$=1; encode("push const %s\n",$1); }
-| STRING COMA PARAM_CALL                    {$$=1+$3; encode("push const %s\n",$1); }
 
 
+/*
+  Llamadas a función
+*/
+
+FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       
+{
+  if (getsim($1)->ival != $3)
+    error("Function bad called. Wrong parametres number");
+  encode("call %s\n",getsim($1)->name);   
+}
+
+| ID PAR_A PAR_C                      
+{
+  encode("call %s\n",getsim($1)->name); 
+}
+;
+
+
+PARAM_CALL: ID                              
+{
+  $$=1; 
+  encode("push sim %s\n",getsim($1)->name); 
+}
+
+| ID COMA PARAM_CALL                        
+{
+  $$=1+$3; 
+  encode("push sim %s\n",getsim($1)->name); 
+}
+
+| INT                                       
+{
+  $$=1; 
+  encode("push const %d\n",$1); 
+}
+
+| INT COMA PARAM_CALL                       
+{
+  $$=1+$3; 
+  encode("push const %d\n",$1); 
+}
+
+| STRING                                    
+{
+  $$=1; 
+  encode("push const %s\n",$1); 
+}
+
+| STRING COMA PARAM_CALL                    
+{
+  $$=1+$3; 
+  encode("push const %s\n",$1); 
+}
+
+
+
+/*
+  Sentencias IF
+*/
+
+IF_SENT: IF PAR_A EXP PAR_C BLOCK_START BLOCK_SENT BLOCK_END
+{
+  encode ("if");
+}
 
 %% 
-
-
-  //void error(const char *str);
 

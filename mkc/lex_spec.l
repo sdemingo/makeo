@@ -30,7 +30,7 @@ LETTER   [a-z0-9.]*
 
 "return"           return RETURN;
 
-"if"               //printf("[IF]\n");
+"if"               return IF;
 
 "while"            //printf("[WHILE]\n");
 
@@ -75,6 +75,8 @@ LETTER   [a-z0-9.]*
 "*"                return MUL; 
 
 "/"                return DIV; 
+
+"=="               return EQ; 
 
 \n                 //return END_SENT;
 

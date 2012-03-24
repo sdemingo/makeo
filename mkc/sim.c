@@ -80,20 +80,6 @@ Sim *getsim(int id)
 }
 
 
-void dump(){
-  
-  int i;
-  
-  printf (" - TABLA DE SIMBOLOS - \n");
-  for (i=0;i<tlast;i++){
-    printf ("\t");
-    text(simtab[i]);
-    printf ("\n");
-  }
-  printf ("\n");
-}
-
-
 void text(Sim si){
 
   char *s;
@@ -113,6 +99,9 @@ void text(Sim si){
   case S_FCALL:
     strcat(s," [FCALL]");
     break;
+ case S_BOOLEAN:
+    strcat(s," [BOOL]");
+    break;
   case S_PARAM:
     strcat(s," [PARAM]");
     break;
@@ -122,6 +111,22 @@ void text(Sim si){
   }
   printf("%s",s);
 }
+
+
+void dump(){
+  
+  int i;
+  
+  printf (" - TABLA DE SIMBOLOS - \n");
+  for (i=0;i<tlast;i++){
+    printf ("\t");
+    text(simtab[i]);
+    printf ("\n");
+  }
+  printf ("\n");
+}
+
+
 
 
 int exists(char *simname){

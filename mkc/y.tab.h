@@ -56,7 +56,9 @@
      BLOCK_END = 272,
      PAR_A = 273,
      PAR_C = 274,
-     COMA = 275
+     COMA = 275,
+     IF = 276,
+     EQ = 277
    };
 #endif
 /* Tokens.  */
@@ -78,6 +80,8 @@
 #define PAR_A 273
 #define PAR_C 274
 #define COMA 275
+#define IF 276
+#define EQ 277
 
 
 
@@ -97,7 +101,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 101 "y.tab.h"
+#line 105 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

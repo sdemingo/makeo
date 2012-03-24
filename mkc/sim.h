@@ -3,6 +3,7 @@ enum Stype {S_NULL,
             S_INT,
 	    S_FLOAT,
 	    S_STRING,
+	    S_BOOLEAN,
             S_FCALL,
 	    S_PARAM,
 };
