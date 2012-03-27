@@ -265,7 +265,8 @@ void proccom(com *c,tab **t){
     if (isnull(u))
       error(c,"empty stack\n");
     addsim(*t,c->arg1,u);
-    //printf ("u_val2text: %s\n",u_val2text(u));
+    //printf ("Añadimos %s\n",c->arg1);
+    //ptab(*t);
     break;
 
 
@@ -348,7 +349,8 @@ void proccom(com *c,tab **t){
     if (isnull(u))
       error(c,"Return address not defined\n");
     pcounter=s->val.data.ival;   //return to the caller
-    //delcontext(t);
+    delcontext(t);
+    
     break;
 
   case C_IO:

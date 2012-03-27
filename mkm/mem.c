@@ -140,13 +140,10 @@ void newcontext(tab **m,char *name){
 }
 
 
-
 void delcontext(tab **m){
 
-  /*
-    Leak.
-   */
-  
+  /* Leak?  */
+
   tab *aux=*m;
   *m=(*m)->parent;
   free(aux);

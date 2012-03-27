@@ -6,12 +6,14 @@
 function main()
 {
 a=3
-b=5
+b=12
 c=a+b
 write('out',c)
 write('out','\n')
- if (1){
+ if (1){	
 	z=2+3+a
+	write('out',z)
+	write('out','\n')
  }
 }
 
