@@ -301,7 +301,7 @@ void proccom(com *c,tab **t){
     if (isnull(u))
       error(c,"empty stack\n");
 
-    if ((u.type==INT) && (u.data.ival!=0)){
+    if ((u.type==INT) && (u.data.ival==0)){
       s=getsim(*t,c->arg1);
       pcounter=s->val.data.ival;
     }

@@ -506,7 +506,7 @@ static const yytype_uint16 yyrline[] =
       98,    98,   105,   111,   119,   132,   139,   148,   154,   158,
      173,   174,   177,   178,   179,   188,   194,   202,   211,   221,
      230,   238,   246,   252,   261,   270,   279,   289,   296,   310,
-     317,   324,   330,   336,   342,   348,   354,   366,   369
+     317,   324,   330,   336,   342,   348,   354,   366,   373
 };
 #endif
 
@@ -1795,19 +1795,30 @@ yyreduce:
 }
     break;
 
+  case 47:
+
+/* Line 1455 of yacc.c  */
+#line 367 "yacc_spec.y"
+    {
+  //encode ("label fin-if\n");
+  dumpcode();
+}
+    break;
+
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 370 "yacc_spec.y"
+#line 374 "yacc_spec.y"
     {
-  encode ("if ()\n");
+  encode ("goto-ifz fin-de-if\n");
+  pushcode("label fin-if\n");
 }
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1811 "y.tab.c"
+#line 1822 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2019,7 +2030,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 376 "yacc_spec.y"
+#line 381 "yacc_spec.y"
  
 
 

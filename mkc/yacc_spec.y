@@ -364,11 +364,19 @@ PARAM_CALL: ID
 */
 
 IF_SENT: IF_HDR BLOCK_START BLOCK_SENT BLOCK_END
+{
+  encode ("label fin-if\n");
+  //dumpcode();
+}
 ;
 
 IF_HDR: IF PAR_A EXP PAR_C 
 {
-  encode ("if ()\n");
+  encode ("goto-ifz fin-de-if\n");
+
+  /*
+    ¿Como transimitimos el nombre de la etiqueta
+   */
 }
 ;
 

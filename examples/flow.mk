@@ -10,8 +10,8 @@ b=5
 c=a+b
 write('out',c)
 write('out','\n')
-if (1){
-	z=2
-}
+ if (1){
+	z=2+3+a
+ }
 }
 
