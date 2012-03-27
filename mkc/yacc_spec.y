@@ -363,10 +363,15 @@ PARAM_CALL: ID
   Sentencias IF
 */
 
-IF_SENT: IF PAR_A EXP PAR_C BLOCK_START BLOCK_SENT BLOCK_END
+IF_SENT: IF_HDR BLOCK_START BLOCK_SENT BLOCK_END
+;
+
+IF_HDR: IF PAR_A EXP PAR_C 
 {
-  encode ("if");
+  encode ("if ()\n");
 }
+;
+
 
 %% 
 

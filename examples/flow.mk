@@ -10,6 +10,8 @@ b=5
 c=a+b
 write('out',c)
 write('out','\n')
-bo=a==b
+if (1){
+	z=2
+}
 }
 

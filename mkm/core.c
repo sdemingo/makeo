@@ -250,7 +250,6 @@ void proccom(com *c,tab **t){
   sim *s;
   char istr[4];
 
-
   switch (c->type){
     
   case C_PUSH:
@@ -294,8 +293,7 @@ void proccom(com *c,tab **t){
     break;
 
 
-
-  case C_GOTO_IFNZ:
+  case C_GOTO_IFZ:
    if (!isvalidcom(c,1))
       error(c,"bad command");
 

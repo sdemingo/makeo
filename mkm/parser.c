@@ -156,8 +156,8 @@ int gettype(char *cs){
     return C_LABEL;
   else if (!strcmp(cs,"goto"))
     return C_GOTO;
-  else if (!strcmp(cs,"goto-ifnz"))
-    return C_GOTO_IFNZ;
+  else if (!strcmp(cs,"goto-ifz"))
+    return C_GOTO_IFZ;
   else if (!strcmp(cs,"function"))
     return C_FUNCTION;
   else if (!strcmp(cs,"return"))
