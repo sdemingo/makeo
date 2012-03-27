@@ -71,6 +71,14 @@ void dumpcode(){
 }
 
 
+void clearcode(){
+  if (codebuf==NULL)
+    return;
+  free(codebuf);
+  codebuf=NULL;
+}
+
+
 
 char* path(char *mod){
 

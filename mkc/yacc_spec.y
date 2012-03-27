@@ -68,6 +68,7 @@
 %type <literal> STRING
 %type <ival> PARAM_DEF
 %type <ival> PARAM_CALL
+%type <ival> IF_HDR
 
 
 %%
@@ -365,20 +366,25 @@ PARAM_CALL: ID
 
 IF_SENT: IF_HDR BLOCK_START BLOCK_SENT BLOCK_END
 {
-  encode ("label fin-if\n");
-  //dumpcode();
+  encode ("label %s\n",getsim($1)->name);
 }
 ;
 
 IF_HDR: IF PAR_A EXP PAR_C 
 {
-  encode ("goto-ifz fin-de-if\n");
+  /* 
+     we create the if label to jump it and we add
+     the label to the simtable
+  */
 
-  /*
-    ¿Como transimitimos el nombre de la etiqueta
-   */
+  char iflabel[15];   
+  sprintf(iflabel,"fi-%d",yylineno);
+  int li=addsim(iflabel);
+  encode ("goto-ifz %s\n",getsim(li)->name);
+  $$=li;
 }
 ;
+
 
 
 %% 
