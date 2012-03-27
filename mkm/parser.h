@@ -11,6 +11,7 @@
 
 
 enum Type{C_ATH = 1,
+	  C_BOOL,
 	  C_PUSH,
 	  C_POP,
 	  C_LABEL,

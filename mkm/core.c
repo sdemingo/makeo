@@ -86,7 +86,26 @@ void op_mul(com *c){
 }
 
 
+void op_eq(com *c){
+  u_val u1,u2,ures;
+  
+  u1=pop();
+  u2=pop();
+  if ((isnull(u1)) || (isnull(u2)))
+    error(c,"no enough operators in stack to sub\n");
+  
+  if (u1.type!=u2.type)
+    error(c,"operators type are diferents\n");
 
+  ures.type=u1.type;
+  if (ures.type==INT)
+    ures.data.ival=u2.data.ival==u1.data.ival;
+  if (ures.type==FLOAT)
+    ures.data.fval=u2.data.fval==u1.data.fval;
+  if (ures.type==STRING)
+    ures.data.fval=!strcmp(u2.data.sval,u1.data.sval);
+  push(ures);
+}
 
 
 void io_op(com *c,tab *t){
@@ -173,6 +192,8 @@ void eval_op(com *c){
     op_sub(c);
   }else if(!strcmp(c->cmd,"mul")){
     op_mul(c);
+  }else if(!strcmp(c->cmd,"eq")){
+    op_eq(c);
   }else
     error (c,"operation %s unknow\n",c->cmd);
 }
@@ -265,20 +286,25 @@ void proccom(com *c,tab **t){
     if (isnull(u))
       error(c,"empty stack\n");
     addsim(*t,c->arg1,u);
-    //printf ("Añadimos %s\n",c->arg1);
-    //ptab(*t);
     break;
 
 
   case C_ATH:
-   if (!isvalidcom(c,0))
+    if (!isvalidcom(c,0))
+      error(c,"bad command");
+    eval_op(c);
+    break;
+
+    
+  case C_BOOL:
+    if (!isvalidcom(c,0))
       error(c,"bad command");
     eval_op(c);
     break;
 
 
   case C_LABEL:
-   if (!isvalidcom(c,1))
+    if (!isvalidcom(c,1))
       error(c,"bad command");
     sprintf(istr,"%d",c->nline);
     u=get_u_val(istr);
@@ -287,7 +313,7 @@ void proccom(com *c,tab **t){
 
 
   case C_GOTO:
-   if (!isvalidcom(c,1))
+    if (!isvalidcom(c,1))
       error(c,"bad command");
     s=getsim(*t,c->arg1);
     pcounter=s->val.data.ival;
@@ -295,7 +321,7 @@ void proccom(com *c,tab **t){
 
 
   case C_GOTO_IFZ:
-   if (!isvalidcom(c,1))
+    if (!isvalidcom(c,1))
       error(c,"bad command");
 
     u=pop();
@@ -310,7 +336,7 @@ void proccom(com *c,tab **t){
 
 
   case C_FUNCTION:
-   if (!isvalidcom(c,1))
+    if (!isvalidcom(c,1))
       error(c,"bad command");
     u=pop();                     //Save the return address to can back
     if (isnull(u))
@@ -322,7 +348,7 @@ void proccom(com *c,tab **t){
 
     
   case C_CALL:
-   if (!isvalidcom(c,1))
+    if (!isvalidcom(c,1))
       error(c,"bad command");
     sprintf(istr,"%d",pcounter);
     u=get_u_val(istr);

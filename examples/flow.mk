@@ -1,16 +1,13 @@
 
 
-    # Codigo MK de alto nivel listo para ser compilado por mkc y
-    # generar el codigo intermedio que ejecutará mkm 
-
 function main()
 {
 a=3
-b=12
+b=3
 c=a+b
 write('out',c)
 write('out','\n')
- if (1){	
+ if (b==a){	
 	z=2+3+a
 	write('out',z)
 	write('out','\n')

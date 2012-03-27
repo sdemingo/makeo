@@ -299,6 +299,12 @@ LEXP2: ID EQ
   pushcode("eq\n");
   pushcode("push sim %s\n",getsim($1)->name);
 }
+
+| INT EQ
+{
+  pushcode("eq\n");
+  pushcode("push const %s\n",$1);
+}
 ;
 
 
@@ -370,7 +376,7 @@ IF_SENT: IF_HDR BLOCK_START BLOCK_SENT BLOCK_END
 }
 ;
 
-IF_HDR: IF PAR_A EXP PAR_C 
+IF_HDR: IF PAR_A LEXP PAR_C 
 {
   /* 
      we create the if label to jump it and we add
