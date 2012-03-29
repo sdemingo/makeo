@@ -66,8 +66,8 @@
 
 %type <ival> EXP
 %type <ival> EXP2
-%type <ival> LOPER
-%type <ival> LOPER2
+%type <ival> LEXP
+%type <ival> LEXP2
 %type <ival> RETURN_SENT
 %type <ival> FUNC_HDR
 %type <literal> STRING
@@ -270,6 +270,18 @@ EXP: EXP2 ID
 {
   $$=S_PARAM;
 }
+
+
+| PAR_A EXP PAR_C
+{
+  $$=$2;
+
+}
+
+| EXP2 PAR_A EXP PAR_C
+{
+  $$=$3;
+}
 ;
 
 
@@ -279,7 +291,7 @@ EXP: EXP2 ID
 
 EXP2: EXP SUB
 {
-  if (!cmptypes($1,S_STRING))
+  if (cmptypes($1,S_STRING))
     error("Operation not allowed with strings");
   else
     pushcode("sub\n");
@@ -288,7 +300,7 @@ EXP2: EXP SUB
 
 | EXP MUL
 {
-  if (!cmptypes($1,S_STRING))
+  if (cmptypes($1,S_STRING))
     error("Operation not allowed with strings");
   else
     pushcode("mul\n");
@@ -299,7 +311,8 @@ EXP2: EXP SUB
 {
   pushcode("add\n");
   $$=$1;
-} 
+}
+
 ;
 
 
@@ -307,40 +320,29 @@ EXP2: EXP SUB
    --------- Booleans expresions --------- 
 */
 
-LEXP: LOPER
-;
-
-
-/* 
-  LOPER: simple operacion binaria booleana. Dos operadores y un
-  operador, por ahora solo 'eq'
-*/
-
-LOPER: LOPER2 ID
+LEXP: LEXP2 ID
 {
   encode("push sim %s\n",getsim($2)->name);
   dumpcode();
 }
 
-| LOPER2 INT
+| LEXP2 INT
 {
   encode("push const %d\n",$2);
   dumpcode();
 }
 
-| LOPER2 STRING
+| LEXP2 STRING
 {
   encode("push const %s\n",$2);
   dumpcode();
 }
 
-| LOPER2 PAR_A LOPER PAR_C
-{
-}
+| LEXP2 PAR_A LEXP PAR_C
 ;
 
 
-LOPER2: ID LOP
+LEXP2: ID LOP
 {
   pushcode("push sim %s\n",getsim($1)->name);
 }
@@ -355,10 +357,10 @@ LOPER2: ID LOP
   pushcode("push const %s\n",$1);
 }
 
-| PAR_A LOPER PAR_C LOP
+| PAR_A LEXP PAR_C LOP
 {
-
 }
+;
 
 
 LOP: EQ
