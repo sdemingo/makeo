@@ -58,11 +58,16 @@
 %token COMA
 %token IF
 %token EQ
+%token NQ
+%token LT
+%token GT
+%token AND
+%token OR
 
 %type <ival> EXP
 %type <ival> EXP2
-%type <ival> LEXP
-%type <ival> LEXP2
+%type <ival> LOPER
+%type <ival> LOPER2
 %type <ival> RETURN_SENT
 %type <ival> FUNC_HDR
 %type <literal> STRING
@@ -101,7 +106,14 @@ FUNCS : FUNC_CODE | FUNCS FUNC_CODE
 
 
 
-/* Reglas para la declaración de funciones */
+
+
+
+
+
+/* 
+   --------- Declaración de funciones --------- 
+*/
 
 FUNC_CODE : FUNC_HDR BLOCK_START BLOCK_SENT RETURN_SENT 
 {
@@ -182,9 +194,13 @@ SENT : ASIG
 
 
 
+
+
+
+
 /*
-  Expresiones
- */
+  --------- Expresiones --------- 
+*/
 
 ASIG: ID ASIG_OP EXP          
 {
@@ -257,7 +273,9 @@ EXP: EXP2 ID
 ;
 
 
-/* Math expresions */
+/* 
+   --------- Math expresions --------- 
+*/
 
 EXP2: EXP SUB
 {
@@ -285,33 +303,88 @@ EXP2: EXP SUB
 ;
 
 
-/* Booleans expresions  */
+/* 
+   --------- Booleans expresions --------- 
+*/
 
-LEXP: LEXP2 ID
+LEXP: LOPER
+;
+
+
+/* 
+  LOPER: simple operacion binaria booleana. Dos operadores y un
+  operador, por ahora solo 'eq'
+*/
+
+LOPER: LOPER2 ID
 {
   encode("push sim %s\n",getsim($2)->name);
   dumpcode();
 }
+
+| LOPER2 INT
+{
+  encode("push const %d\n",$2);
+  dumpcode();
+}
+
+| LOPER2 STRING
+{
+  encode("push const %s\n",$2);
+  dumpcode();
+}
+
+| LOPER2 PAR_A LOPER PAR_C
+{
+}
 ;
 
-LEXP2: ID EQ
+
+LOPER2: ID LOP
 {
-  pushcode("eq\n");
   pushcode("push sim %s\n",getsim($1)->name);
 }
 
-| INT EQ
+| INT LOP
 {
-  pushcode("eq\n");
+  pushcode("push const %d\n",$1);
+}
+
+| STRING LOP
+{
   pushcode("push const %s\n",$1);
 }
-;
+
+| PAR_A LOPER PAR_C LOP
+{
+
+}
+
+
+LOP: EQ
+{
+  pushcode("eq\n");
+}
+
+| AND
+{
+  pushcode("and\n");
+}
+
+| OR
+{
+  pushcode("or\n");
+}
+
+
+
+
 
 
 
 
 /*
-  Llamadas a función
+  --------- Llamadas a función ---------   
 */
 
 FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       
@@ -366,8 +439,9 @@ PARAM_CALL: ID
 
 
 
+
 /*
-  Sentencias IF
+  ---------  Sentencias IF --------- 
 */
 
 IF_SENT: IF_HDR BLOCK_START BLOCK_SENT BLOCK_END
@@ -376,7 +450,7 @@ IF_SENT: IF_HDR BLOCK_START BLOCK_SENT BLOCK_END
 }
 ;
 
-IF_HDR: IF PAR_A LEXP PAR_C 
+IF_HDR: IF PAR_A LEXP PAR_C
 {
   /* 
      we create the if label to jump it and we add

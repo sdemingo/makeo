@@ -34,6 +34,10 @@ LETTER   [a-z0-9.]*
 
 "while"            //printf("[WHILE]\n");
 
+"and"              return AND;
+
+"or"               return OR;
+
 "("                return PAR_A;
 
 ")"                return PAR_C;
@@ -76,7 +80,13 @@ LETTER   [a-z0-9.]*
 
 "/"                return DIV; 
 
-"=="               return EQ; 
+"=="               return EQ;
+
+"!="               return NQ;
+
+">"                return GT;
+
+"<"                return LT;
 
 \n                 //return END_SENT;
 

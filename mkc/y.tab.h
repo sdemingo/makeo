@@ -58,7 +58,12 @@
      PAR_C = 274,
      COMA = 275,
      IF = 276,
-     EQ = 277
+     EQ = 277,
+     NQ = 278,
+     LT = 279,
+     GT = 280,
+     AND = 281,
+     OR = 282
    };
 #endif
 /* Tokens.  */
@@ -82,6 +87,11 @@
 #define COMA 275
 #define IF 276
 #define EQ 277
+#define NQ 278
+#define LT 279
+#define GT 280
+#define AND 281
+#define OR 282
 
 
 
@@ -101,7 +111,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 105 "y.tab.h"
+#line 115 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

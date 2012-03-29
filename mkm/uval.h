@@ -1,7 +1,7 @@
 #if !defined (UVAL_H)
 #define UVAL_H
 
-enum stype{INT,CHAR,FLOAT,STRING,NULLVAL};
+enum stype{INT,CHAR,FLOAT,STRING,BOOL,NULLVAL};
 
 union tval{
   int ival;

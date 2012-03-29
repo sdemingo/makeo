@@ -168,7 +168,8 @@ int gettype(char *cs){
 	   || (!strcmp(cs,"mul"))|| (!strcmp(cs,"div"))) 
     return C_ATH;
   else if ((!strcmp(cs,"eq")) || (!strcmp(cs,"nq"))
-	   || (!strcmp(cs,"gt"))|| (!strcmp(cs,"lt"))) 
+	   || (!strcmp(cs,"gt"))|| (!strcmp(cs,"lt"))
+	   || (!strcmp(cs,"and"))|| (!strcmp(cs,"or"))) 
     return C_BOOL;
   else if ((!strcmp(cs,"open")) || (!strcmp(cs,"close"))
 	   || (!strcmp(cs,"read")) || (!strcmp(cs,"write"))

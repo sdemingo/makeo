@@ -97,15 +97,52 @@ void op_eq(com *c){
   if (u1.type!=u2.type)
     error(c,"operators type are diferents\n");
 
-  ures.type=u1.type;
+  ures.type=INT;
   if (ures.type==INT)
     ures.data.ival=u2.data.ival==u1.data.ival;
   if (ures.type==FLOAT)
-    ures.data.fval=u2.data.fval==u1.data.fval;
+    ures.data.ival=u2.data.fval==u1.data.fval;
   if (ures.type==STRING)
-    ures.data.fval=!strcmp(u2.data.sval,u1.data.sval);
+    ures.data.ival=!strcmp(u2.data.sval,u1.data.sval);
+
   push(ures);
 }
+
+
+void op_and(com *c){
+  u_val u1,u2,ures;
+  
+  u1=pop();
+  u2=pop();
+  if ((isnull(u1)) || (isnull(u2)))
+    error(c,"no enough operators in stack to sub\n");
+  
+  if ((u1.type!=u2.type) && (u1.type!=INT))
+    error(c,"operators are not boolean\n");
+
+  ures.type=INT;
+  ures.data.ival=u2.data.ival && u1.data.ival;
+  push(ures);
+}
+
+
+
+void op_or(com *c){
+  u_val u1,u2,ures;
+  
+  u1=pop();
+  u2=pop();
+  if ((isnull(u1)) || (isnull(u2)))
+    error(c,"no enough operators in stack to sub\n");
+  
+  if ((u1.type!=u2.type) && (u1.type!=INT))
+    error(c,"operators are not boolean\n");
+
+  ures.type=INT;
+  ures.data.ival=u2.data.ival ||  u1.data.ival;
+  push(ures);
+}
+
 
 
 void io_op(com *c,tab *t){
@@ -194,6 +231,10 @@ void eval_op(com *c){
     op_mul(c);
   }else if(!strcmp(c->cmd,"eq")){
     op_eq(c);
+  }else if(!strcmp(c->cmd,"and")){
+    op_and(c);
+  }else if(!strcmp(c->cmd,"or")){
+    op_or(c);
   }else
     error (c,"operation %s unknow\n",c->cmd);
 }
