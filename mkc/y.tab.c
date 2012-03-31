@@ -1843,7 +1843,7 @@ yyreduce:
 #line 393 "yacc_spec.y"
     {
   if (getsim((yyvsp[(1) - (4)].sval))->ival != (yyvsp[(3) - (4)].ival))
-    error("Function bad called. Wrong parametres number");
+    error("Wrong parametres number in call");
   encode("call %s\n",getsim((yyvsp[(1) - (4)].sval))->name);   
 }
     break;

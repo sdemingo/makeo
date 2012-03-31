@@ -130,7 +130,7 @@ void load_il(char *mod){
   char rc;
   char lin[512];
   char *token;
-  int n_token=0,in;
+  int n_token,in;
 
   fd=fopen(path(mod),"r");
 
@@ -139,6 +139,7 @@ void load_il(char *mod){
   }else{
     while (fgets(lin, 512, fd) != NULL){
       if (strstr(lin,"#header")){
+	n_token=0;
 	token = strtok(lin, " ");
 	while (token) {
 	  n_token++;

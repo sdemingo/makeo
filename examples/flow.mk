@@ -9,7 +9,7 @@ msg='cassaaa'
 write('out',msg)
 write('out','\n')
  if ((a==3) or (a==b)){	
-	z=2+3+a
+	z=(2+b)*2
 	write('out',z)
 	write('out','\n')
  }

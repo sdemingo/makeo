@@ -392,7 +392,7 @@ LOP: EQ
 FUNC_CALL: ID PAR_A PARAM_CALL PAR_C       
 {
   if (getsim($1)->ival != $3)
-    error("Function bad called. Wrong parametres number");
+    error("Wrong parametres number in call");
   encode("call %s\n",getsim($1)->name);   
 }
 
