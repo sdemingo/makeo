@@ -8,7 +8,7 @@ c=a+b
 msg='cassaaa'
 write('out',msg)
 write('out','\n')
- if ((a==3) or (a==b)){	
+ if (a>5){	
 	z=(2+b)*2
 	write('out',z)
 	write('out','\n')

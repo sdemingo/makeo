@@ -378,6 +378,18 @@ LOP: EQ
   pushcode("or\n");
 }
 
+| GT
+{
+  pushcode("gt\n");
+}
+
+| LT
+{
+  pushcode("lt\n");
+}
+;
+
+
 
 
 

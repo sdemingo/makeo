@@ -126,6 +126,40 @@ void op_and(com *c){
 }
 
 
+void op_lt(com *c){
+  u_val u1,u2,ures;
+  
+  u1=pop();
+  u2=pop();
+  if ((isnull(u1)) || (isnull(u2)))
+    error(c,"no enough operators in stack to sub\n");
+  
+  if ((u1.type!=u2.type) && (u1.type==STRING))
+    error(c,"operators can not be string\n");
+
+  ures.type=INT;
+  ures.data.ival=u1.data.ival < u2.data.ival;
+  push(ures);
+}
+
+
+void op_gt(com *c){
+  u_val u1,u2,ures;
+  
+  u1=pop();
+  u2=pop();
+  if ((isnull(u1)) || (isnull(u2)))
+    error(c,"no enough operators in stack to sub\n");
+  
+  if ((u1.type!=u2.type) && (u1.type==STRING))
+    error(c,"operators can not be string\n");
+
+  ures.type=INT;
+  ures.data.ival=u1.data.ival > u2.data.ival;
+  push(ures);
+}
+
+
 
 void op_or(com *c){
   u_val u1,u2,ures;
@@ -235,6 +269,10 @@ void eval_op(com *c){
     op_and(c);
   }else if(!strcmp(c->cmd,"or")){
     op_or(c);
+  }else if(!strcmp(c->cmd,"lt")){
+    op_lt(c);
+  }else if(!strcmp(c->cmd,"gt")){
+    op_gt(c);
   }else
     error (c,"operation %s unknow\n",c->cmd);
 }
