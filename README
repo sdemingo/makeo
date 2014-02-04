@@ -1,4 +1,3 @@
-
 	WHAT IS MAKEO
 
 It's a really simple stack-based virtual machine and a intermediate
@@ -18,7 +17,7 @@ invited ;-)
 To install Makeo properly you only need to use the followings
 commands:
 
-git clone https://bitbucket.org/sdemingo/makeo.git
+git clone https://github.com/sdemingo/makeo.git
 cd makeo
 make
 make clean
@@ -48,8 +47,3 @@ You can use the following flags with mkm:
     -m: print all symbols on the symbol table with theirs values
 
 
-
-	REFERENCES
-
- - https://bitbucket.org/sdemingo/makeo
- - https://sites.google.com/site/sdemingo/
