@@ -1,4 +1,4 @@
-	WHAT IS MAKEO
+# What is Makeo
 
 It's a really simple stack-based virtual machine and a intermediate
 language interpreter named IL. Now, I'm preparing a reference of this
@@ -12,7 +12,7 @@ help me and learn some things about compilers, of course, you are
 invited ;-)
 
 	
-	INSTALL
+# Install
 
 To install Makeo properly you only need to use the followings
 commands:
@@ -25,7 +25,7 @@ MKPATH=`pwd`
 export MKPATH
 
 
-	EXECUTING MK PROGRAMS
+# Executing MK programs
 
 MK is a simple high-level programing language. Before you can execute
 a program, you must compile it. To compile a MK program you have to
