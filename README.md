@@ -17,13 +17,14 @@ invited ;-)
 To install Makeo properly you only need to use the followings
 commands:
 
+```
 git clone https://github.com/sdemingo/makeo.git
 cd makeo
 make
 make clean
 MKPATH=`pwd`
 export MKPATH
-
+```
 
 # Executing MK programs
 
@@ -33,12 +34,16 @@ use the mkc tool. This tool compile your MK code into a IL or
 intermediate code based on commands to a stack-based virtual machine.
 
 To compile a MK code use mkc tool:
-   
-   $mkc examples/program.mk -o /tmp/program.il
+
+```   
+$ mkc examples/program.mk -o /tmp/program.il
+```
 
 Now, you can run your program with mkm tool:
 
-   $ mkm /tmp/program.il
+```
+$ mkm /tmp/program.il
+```
 
 You can use the following flags with mkm:
 
